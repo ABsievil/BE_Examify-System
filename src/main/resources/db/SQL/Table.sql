@@ -1,27 +1,14 @@
 CREATE TABLE Users (
-    ID TEXT PRIMARY KEY DEFAULT '',
+    ID TEXT PRIMARY KEY,
     Name TEXT,
     Email TEXT UNIQUE,
-    Dob DATE,
-    Role TEXT NOT NULL
+    Dob DATE
 );
-
-CREATE OR REPLACE FUNCTION generate_user_id()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.ID := NEW.Role || '-' || (10000 + floor(random() * 90000))::TEXT;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER user_id_trigger
-BEFORE INSERT ON Users
-FOR EACH ROW
-EXECUTE FUNCTION generate_user_id();
 
 CREATE TABLE Account (
     Username TEXT PRIMARY KEY,
     Password TEXT NOT NULL,
+    Role TEXT NOT NULL,
     UserID TEXT UNIQUE NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Users(ID) ON DELETE CASCADE
 );
@@ -30,7 +17,8 @@ CREATE TABLE Test (
     ID SERIAL PRIMARY KEY,
     Title TEXT NOT NULL,
     Description TEXT,
-    Passcode TEXT,
+    NumberQuestion INT,
+    Passcode TEXT UNIQUE,
     TestTime INT NOT NULL,
     TimeOpen TIMESTAMP,
     TimeClose TIMESTAMP,
@@ -38,13 +26,23 @@ CREATE TABLE Test (
     FOREIGN KEY (TeacherID) REFERENCES Users(ID) ON DELETE CASCADE
 );
 
+CREATE OR REPLACE FUNCTION generate_passcode()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.Passcode IS NULL THEN
+        NEW.Passcode := LPAD(FLOOR(RANDOM() * 100000000)::TEXT, 8, '0');
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 ALTER SEQUENCE Test_ID_seq RESTART WITH 1;
 
 CREATE TABLE Result (
     StudentID TEXT NOT NULL,
     TestID INT NOT NULL,
     TotalScore INT NOT NULL,
-    SubmittedAt TIMESTAMP NOT NULL,
     StartTime TIMESTAMP NOT NULL,
     EndTime TIMESTAMP NOT NULL,
     PRIMARY KEY (StudentID, TestID),
