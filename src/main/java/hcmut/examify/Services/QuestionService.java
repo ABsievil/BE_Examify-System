@@ -23,8 +23,8 @@ public class QuestionService {
     public ResponseEntity<ResponseObject> FNC_getAllQuestions(Long testId) {
         try {
             String questions = jdbcTemplate.queryForObject(
-                    "SELECT get_all_question_of_test(testId)",
-                    String.class
+                    "SELECT get_all_question_of_test(?)",
+                    String.class, testId
             );
             if (questions == null) {
                 return ResponseEntity.status(HttpStatus.OK)
@@ -53,8 +53,8 @@ public class QuestionService {
     public ResponseEntity<ResponseObject> FNC_getQuestionById(Long testId, Long questionId) {
         try {
             String question = jdbcTemplate.queryForObject(
-                    "SELECT get_question_of_test_by_questionID(testId, questionId)",
-                    String.class
+                    "SELECT get_question_of_test_by_questionID(?, ?)",
+                    String.class, testId, questionId
             );
             if (question == null) {
                 return ResponseEntity.status(HttpStatus.OK)

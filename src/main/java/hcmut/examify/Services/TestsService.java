@@ -40,38 +40,38 @@ public class TestsService {
     public ResponseEntity<ResponseObject> FNC_getAllTests(Long teacherId) {
         try {
             String tests = jdbcTemplate.queryForObject(
-                    "SELECT get_all_test_of_teacher(teacherId)",
-                    String.class
+                    "SELECT get_all_test_of_teacher(?)",
+                    String.class, teacherId
             );
+
             if (tests == null) {
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully with data = null", tests));
+                        .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully with data = null", null));
             }
 
             JsonNode jsonNode = objectMapper.readTree(tests);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully", jsonNode));
+
         } catch (DataAccessException e) {
-            // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
         } catch (JsonProcessingException e) {
-            // Xử lý lỗi khi parse JSON
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
         } catch (Exception e) {
-            // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "Error getting FNC_getAllTests(): " + e.getMessage(), null));
         }
     }
 
+
     public ResponseEntity<ResponseObject> FNC_getTestById(Long teacherId, Long testId) {
         try {
             String test = jdbcTemplate.queryForObject(
-                    "SELECT get_test_of_teacher_by_testID(teacherId, testId)",
-                    String.class
+                    "SELECT get_test_of_teacher_by_testID(?, ?)",
+                    String.class, teacherId, testId
             );
             if (test == null) {
                 return ResponseEntity.status(HttpStatus.OK)
