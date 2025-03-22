@@ -13,6 +13,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- SELECT get_all_question_of_test(1);
+
 -- Lấy nội dung của 1 question bằng questionID
 
 CREATE OR REPLACE FUNCTION get_question_of_test_by_questionID(test_id INT, question_id INT)
@@ -28,6 +30,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- SELECT get_question_of_test_by_questionID(1, 1);
+
 -- Tạo bài Question
 
 CREATE OR REPLACE PROCEDURE create_question(content_input TEXT, score_input FLOAT, test_id_input INT)
@@ -39,12 +43,14 @@ BEGIN
 END;
 $$;
 
+-- CALL create_question('1+1=?', 2.0, 1);
+
 -- Chỉnh sửa thông tin của bài Question
 CREATE OR REPLACE PROCEDURE edit_question(question_id INT, content_input TEXT, score_input FLOAT, testID_input INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    UPDATE Test
+    UPDATE Question
     SET 
         Content = COALESCE(content_input, Content),
         Score = COALESCE(score_input, Score),
@@ -56,6 +62,8 @@ BEGIN
     END IF;
 END;
 $$;
+
+-- CALL edit_question(17, '2+2=?', null, null);
 
 -- Xóa bài Question
 CREATE OR REPLACE PROCEDURE delete_question(question_id INT)
@@ -72,3 +80,5 @@ BEGIN
     END IF;
 END;
 $$;
+
+-- delete_question(17);
