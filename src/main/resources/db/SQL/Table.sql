@@ -1,15 +1,17 @@
 CREATE TABLE Users (
-    ID TEXT PRIMARY KEY,
+    ID SERIAL PRIMARY KEY,
     Name TEXT,
     Email TEXT UNIQUE,
     Dob DATE
 );
 
+ALTER SEQUENCE Users_ID_seq RESTART WITH 1;
+
 CREATE TABLE Account (
     Username TEXT PRIMARY KEY,
     Password TEXT NOT NULL,
     Role TEXT NOT NULL,
-    UserID TEXT UNIQUE NOT NULL,
+    UserID INT UNIQUE NOT NULL,
     FOREIGN KEY (UserID) REFERENCES Users(ID) ON DELETE CASCADE
 );
 
@@ -22,25 +24,14 @@ CREATE TABLE Test (
     TestTime INT NOT NULL,
     TimeOpen TIMESTAMP,
     TimeClose TIMESTAMP,
-    TeacherID TEXT NOT NULL,
+    TeacherID INT NOT NULL,
     FOREIGN KEY (TeacherID) REFERENCES Users(ID) ON DELETE CASCADE
 );
-
-CREATE OR REPLACE FUNCTION generate_passcode()
-RETURNS TRIGGER AS $$
-BEGIN
-    IF NEW.Passcode IS NULL THEN
-        NEW.Passcode := LPAD(FLOOR(RANDOM() * 100000000)::TEXT, 8, '0');
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
 
 ALTER SEQUENCE Test_ID_seq RESTART WITH 1;
 
 CREATE TABLE Result (
-    StudentID TEXT NOT NULL,
+    StudentID INT NOT NULL,
     TestID INT NOT NULL,
     TotalScore INT NOT NULL,
     StartTime TIMESTAMP NOT NULL,
@@ -61,7 +52,7 @@ CREATE TABLE Question (
 ALTER SEQUENCE Question_ID_seq RESTART WITH 1;
 
 CREATE TABLE StudentAnswer (
-    StudentID TEXT NOT NULL,
+    StudentID INT NOT NULL,
     QuestionID INT NOT NULL,
     IsCorrect BOOLEAN NOT NULL,
     PRIMARY KEY (StudentID, QuestionID),

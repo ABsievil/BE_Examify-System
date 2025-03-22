@@ -33,17 +33,18 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE PROCEDURE create_test(
     title_input TEXT,
     description_input TEXT,
-    numberquestion_input INT,
+    passcode_input TEXT,
     testtime_input INT,
     timeopen_input TIMESTAMP,
     timeclose_input TIMESTAMP,
-    teacherID_input TEXT
+    teacherID_input TEXT,
+    numberquestion_input INT
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    INSERT INTO Test (Title, Description, NumberQuestion, TestTime, TimeOpen, TimeClose, TeacherID)
-    VALUES (title_input, description_input, numberquestion_input, testtime_input, timeopen_input, timeclose_input, teacherID_input);
+    INSERT INTO Test (Title, Description, Passcode, TestTime, TimeOpen, TimeClose, TeacherID, NumberQuestion)
+    VALUES (title_input, description_input, passcode_input, testtime_input, timeopen_input, timeclose_input, teacherID_input, numberquestion_input);
 END;
 $$;
 
