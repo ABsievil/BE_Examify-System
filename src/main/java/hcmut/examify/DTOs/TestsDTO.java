@@ -13,8 +13,8 @@ public class TestsDTO {
     private String description;
     private String passcode;
     private Integer testTime;
-    private ZonedDateTime timeOpen;
-    private ZonedDateTime timeClose;
-    private Long teacherId;
+    private String timeOpen;
+    private String timeClose;
+    private Integer teacherId;
     private Integer numberOfQuestion;
 }

@@ -2,6 +2,8 @@ package hcmut.examify.Services;
 
 import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.sql.CallableStatement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -33,35 +35,44 @@ public class TestsService {
 
     public ResponseEntity<ResponseObject> PROC_addTest(TestsDTO testsDTO) {
         try {
-            // Đầu tiên, thêm thông tin cơ bản của bài kiểm tra và lấy ID được tạo
-            Long testId = jdbcTemplate.execute(
+            System.out.println("testsDTO: " + testsDTO);
+
+            // Định dạng cho ISO 8601 và định dạng SQL
+            DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
+            DateTimeFormatter sqlFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            // Chuyển đổi timeOpen
+            LocalDateTime timeOpen = LocalDateTime.parse(testsDTO.getTimeOpen(), isoFormatter);
+            String formattedTimeOpen = timeOpen.format(sqlFormatter);
+
+            // Chuyển đổi timeClose
+            LocalDateTime timeClose = LocalDateTime.parse(testsDTO.getTimeClose(), isoFormatter);
+            String formattedTimeClose = timeClose.format(sqlFormatter);
+
+            jdbcTemplate.execute(
                 "CALL create_test(?, ?, ?, ?, ?, ?, ?, ?)",
-                (PreparedStatementCallback<Long>) ps -> {
+                (PreparedStatementCallback<Void>) ps -> {
                     ps.setString(1, testsDTO.getTitle());
                     ps.setString(2, testsDTO.getDescription());
-                    ps.setString(3, testsDTO.getPasscode());                    
+                    ps.setString(3, testsDTO.getPasscode());
                     ps.setInt(4, testsDTO.getTestTime());
-                    ps.setTimestamp(5, Timestamp.valueOf(testsDTO.getTimeOpen().toLocalDateTime()));
-                    ps.setTimestamp(6, Timestamp.valueOf(testsDTO.getTimeClose().toLocalDateTime()));
-                    ps.setLong(7, testsDTO.getTeacherId());
+                    ps.setTimestamp(5, Timestamp.valueOf(formattedTimeOpen)); // Truyền Timestamp
+                    ps.setTimestamp(6, Timestamp.valueOf(formattedTimeClose)); // Truyền Timestamp
+                    ps.setInt(7, testsDTO.getTeacherId());
                     ps.setInt(8, testsDTO.getNumberOfQuestion());
 
                     ps.execute();
                     return null;
                 }
             );
-        
             return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Thêm bài kiểm tra thành công", testId));
-                
+                .body(new ResponseObject("OK", "Query to update PROC_addTest() successfully", null));
         } catch (DataAccessException e) {
-            // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Lỗi cơ sở dữ liệu: " + e.getMessage(), null));
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
         } catch (Exception e) {
-            // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Lỗi khi thêm bài kiểm tra: " + e.getMessage(), null));
+                .body(new ResponseObject("ERROR", "Error updating PROC_addTest(): " + e.getMessage(), null));
         }
     }
 
