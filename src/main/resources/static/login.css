@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.login {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    height: 200px;
+    width: 240px;
+}
+
+.oauth-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.oauth-button {
+    background-color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+    margin-top: 20px;
+    margin-left: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.oauth-button img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+.oauth-button.google {
+    background-color: #4285f4;
+    color: #fff;
+}
+
+.oauth-button.github {
+    background-color: #333;
+    color: #fff;
+}
+
+body {
+    position: relative;
+}
+
+.back {
+    position: absolute;
+    top: 38em;
+    left: 31.5em;
+}
+
+.message {
+    margin-top: 20px;
+}
