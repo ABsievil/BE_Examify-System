@@ -177,81 +177,81 @@ public class TestsService {
         }
     }
 
-    // public ResponseEntity<ResponseObject> FNC_addTest(TestsDTO testsDTO) {
-    //     try {
-    //         // Định dạng cho ISO 8601 và định dạng SQL
-    //         DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
-    //         DateTimeFormatter sqlFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public ResponseEntity<ResponseObject> FNC_addTest(TestsDTO testsDTO) {
+        try {
+            // Định dạng cho ISO 8601 và định dạng SQL
+            DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
+            DateTimeFormatter sqlFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    //         // Chuyển đổi timeOpen
-    //         LocalDateTime timeOpen = LocalDateTime.parse(testsDTO.getTimeOpen(), isoFormatter);
-    //         String formattedTimeOpen = timeOpen.format(sqlFormatter);
+            // Chuyển đổi timeOpen
+            LocalDateTime timeOpen = LocalDateTime.parse(testsDTO.getTimeOpen(), isoFormatter);
+            String formattedTimeOpen = timeOpen.format(sqlFormatter);
 
-    //         // Chuyển đổi timeClose
-    //         LocalDateTime timeClose = LocalDateTime.parse(testsDTO.getTimeClose(), isoFormatter);
-    //         String formattedTimeClose = timeClose.format(sqlFormatter);
+            // Chuyển đổi timeClose
+            LocalDateTime timeClose = LocalDateTime.parse(testsDTO.getTimeClose(), isoFormatter);
+            String formattedTimeClose = timeClose.format(sqlFormatter);
             
-    //         // The most likely error occurs at Timestamp
-    //         Integer newTestId = jdbcTemplate.queryForObject(
-    //                 "SELECT add_test(?, ?, ?, ?, ?, ?, ?)",
-    //                 Integer.class, 
-    //                 testsDTO.getTitle(),
-    //                 testsDTO.getDescription(),  
-    //                 testsDTO.getTestTime(),
-    //                 Timestamp.valueOf(formattedTimeOpen),
-    //                 Timestamp.valueOf(formattedTimeClose),
-    //                 testsDTO.getTeacherId(),
-    //                 testsDTO.getNumberOfQuestion()
-    //         );
+            // The most likely error occurs at Timestamp
+            Integer newTestId = jdbcTemplate.queryForObject(
+                    "SELECT add_test(?, ?, ?, ?, ?, ?, ?)",
+                    Integer.class, 
+                    testsDTO.getTitle(),
+                    testsDTO.getDescription(),  
+                    testsDTO.getTestTime(),
+                    Timestamp.valueOf(formattedTimeOpen),
+                    Timestamp.valueOf(formattedTimeClose),
+                    testsDTO.getTeacherId(),
+                    testsDTO.getNumberOfQuestion()
+            );
 
 
-    //         if (newTestId == null) {
-    //             return ResponseEntity.status(HttpStatus.OK)
-    //                     .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully with data = null", null));
-    //         }
+            if (newTestId == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully with data = null", null));
+            }
 
-    //         System.out.println("newTestId: " + newTestId);
+            System.out.println("newTestId: " + newTestId);
 
-    //         // Sau đó, thêm các câu hỏi và câu trả lời
-    //         for (QuestionDTO question : testsDTO.getQuestions()) {
-    //             System.out.println("question: " + question);
+            // Sau đó, thêm các câu hỏi và câu trả lời
+            for (QuestionDTO question : testsDTO.getQuestions()) {
+                System.out.println("question: " + question);
 
-    //             Integer questionId = jdbcTemplate.queryForObject(
-    //                 "SELECT add_question(?, ?, ?)",
-    //                 Integer.class,
-    //                 question.getContent(),
-    //                 question.getScore(),
-    //                 newTestId
-    //             );
+                Integer questionId = jdbcTemplate.queryForObject(
+                    "SELECT add_question(?, ?, ?)",
+                    Integer.class,
+                    question.getContent(),
+                    question.getScore(),
+                    newTestId
+                );
                 
-    //             System.out.println("questionId: " + questionId);
+                System.out.println("questionId: " + questionId);
 
-    //             // Thêm các câu trả lời cho mỗi câu hỏi
-    //             for (AnswerDTO answer : question.getAnswers()) {
-    //                 jdbcTemplate.execute(
-    //                     "SELECT add_answer(?, ?, ?)",
-    //                     (PreparedStatementCallback<Void>) ps -> {
-    //                         ps.setString(1, answer.getContent());
-    //                         ps.setBoolean(2, answer.getIsCorrect());
-    //                         ps.setInt(3, questionId);  // Chuyển từ setLong sang setInt để phù hợp với tham số function
+                // Thêm các câu trả lời cho mỗi câu hỏi
+                for (AnswerDTO answer : question.getAnswers()) {
+                    jdbcTemplate.execute(
+                        "SELECT add_answer(?, ?, ?)",
+                        (PreparedStatementCallback<Void>) ps -> {
+                            ps.setString(1, answer.getContent());
+                            ps.setBoolean(2, answer.getIsCorrect());
+                            ps.setInt(3, questionId);  // Chuyển từ setLong sang setInt để phù hợp với tham số function
                             
-    //                         ps.execute();
-    //                         return null;
-    //                     }
-    //                 );
-    //             }
-    //             System.out.println("add answer success");
-    //         }
+                            ps.execute();
+                            return null;
+                        }
+                    );
+                }
+                System.out.println("add answer success");
+            }
 
-    //         return ResponseEntity.status(HttpStatus.OK)
-    //                 .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully", null));
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully", null));
 
-    //     } catch (DataAccessException e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(new ResponseObject("ERROR", "Error getting FNC_getAllTests(): " + e.getMessage(), null));
-    //     }
-    // }
+        } catch (DataAccessException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Error getting FNC_getAllTests(): " + e.getMessage(), null));
+        }
+    }
 }
