@@ -15,9 +15,8 @@ public class TestsController {
     @Autowired
     private TestsService testsService;
 
-    @GetMapping("/getTeacherId")
+    @GetMapping
     public ResponseEntity<ResponseObject> getAllTests(@RequestParam("teacherId") Integer teacherId) {
-        System.out.println("teacherId: " + teacherId);
         return testsService.FNC_getAllTests(teacherId);
     }
 
