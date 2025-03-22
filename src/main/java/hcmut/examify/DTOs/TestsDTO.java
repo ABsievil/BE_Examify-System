@@ -16,4 +16,5 @@ public class TestsDTO {
     private String timeClose;
     private Integer teacherId;
     private Integer numberOfQuestion;
+    private List<QuestionDTO> questions;
 }
