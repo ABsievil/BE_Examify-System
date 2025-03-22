@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "users")
+@Table(name = "account")
 public class User {
     @Id
     @Column(name = "username", nullable = false, unique = true)
@@ -29,13 +29,10 @@ public class User {
     @Column(name = "password", nullable = false, unique = false)
     private String password;
 
-    @Column(name = "email", nullable = false, unique = false)
-    private String email;
+    @Column(name = "userid", nullable = false, unique = true)
+    private String userid;
 
     @Column(name= "role")
     @Enumerated(EnumType.STRING)
     private Role role;
-
-    @Embedded
-    private PersonalInformation information;
 }

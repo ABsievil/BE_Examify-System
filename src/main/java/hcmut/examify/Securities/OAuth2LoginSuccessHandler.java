@@ -48,7 +48,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         OAuth2User principal = (OAuth2User) authentication.getPrincipal();
         // String email = (String) principal.getAttribute("email");       // error: github not public email
         String nameUser = (String) principal.getName();
-        User user = userRepository.findByEmail(nameUser);
+        User user = userRepository.findByUsername(nameUser);
         Optional<User> optionalUser = Optional.ofNullable(user);
 
         optionalUser.ifPresentOrElse(u -> {
@@ -62,7 +62,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             // save user into db to checking with jwt token on later request
             User userEntity = new User();
             userEntity.setUsername(nameUser);
-            userEntity.setEmail(nameUser);
+            // userEntity.setEmail(nameUser);
             userEntity.setPassword(nameUser);
             userEntity.setRole(Role.STUDENT);
             userRepository.save(userEntity);
