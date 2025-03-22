@@ -66,7 +66,6 @@ public class TestsService {
         }
     }
 
-
     public ResponseEntity<ResponseObject> FNC_getTestById(Long teacherId, Long testId) {
         try {
             String test = jdbcTemplate.queryForObject(
