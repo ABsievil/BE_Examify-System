@@ -43,6 +43,16 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE FUNCTION add_answer(
+    content_input TEXT, 
+    iscorrect_input BOOLEAN, 
+    question_id_input INT
+) RETURNS VOID AS $$
+BEGIN
+    INSERT INTO Answer (Content, IsCorrect, QuestionID)
+    VALUES (content_input, iscorrect_input, question_id_input);
+END;
+$$ LANGUAGE plpgsql;
 -- CALL create_answer('a+b=0', false, 1)
 
 -- Chỉnh sửa thông tin của Answer

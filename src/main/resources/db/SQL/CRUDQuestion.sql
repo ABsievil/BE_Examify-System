@@ -34,14 +34,36 @@ $$ LANGUAGE plpgsql;
 
 -- Tạo bài Question
 
-CREATE OR REPLACE PROCEDURE create_question(content_input TEXT, score_input FLOAT, test_id_input INT)
+CREATE OR REPLACE PROCEDURE create_question(
+    content_input TEXT, 
+    score_input FLOAT, 
+    test_id_input INT,
+    INOUT new_question_id INT DEFAULT NULL
+)
 LANGUAGE plpgsql
 AS $$
 BEGIN
     INSERT INTO Question (Content, Score, TestID)
-    VALUES (content_input, score_input, test_id_input);
+    VALUES (content_input, score_input, test_id_input)
+    RETURNING ID INTO new_question_id;
 END;
 $$;
+
+CREATE OR REPLACE FUNCTION add_question(
+    content_input TEXT, 
+    score_input FLOAT, 
+    test_id_input INT
+) RETURNS INT AS $$
+DECLARE
+    new_question_id INT;
+BEGIN
+    INSERT INTO Question (Content, Score, TestID)
+    VALUES (content_input, score_input, test_id_input)
+    RETURNING ID INTO new_question_id;
+    
+    RETURN new_question_id;
+END;
+$$ LANGUAGE plpgsql;
 
 -- CALL create_question('1+1=?', 2.0, 1);
 
