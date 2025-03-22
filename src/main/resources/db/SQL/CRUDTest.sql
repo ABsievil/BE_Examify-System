@@ -1,6 +1,6 @@
 -- Lấy thông tin tất cả bài test
 
-CREATE OR REPLACE FUNCTION get_all_test_of_teacher(teacher_id TEXT)
+CREATE OR REPLACE FUNCTION get_all_test_of_teacher(teacher_id INT)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
@@ -13,9 +13,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- SELECT get_all_test_of_teacher(1);
+
 -- Lấy thông tin một bài test dựa trên testID
 
-CREATE OR REPLACE FUNCTION get_test_of_teacher_by_testID(teacher_id TEXT, test_id INT)
+CREATE OR REPLACE FUNCTION get_test_of_teacher_by_testID(teacher_id INT, test_id INT)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
@@ -28,6 +30,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- SELECT get_test_of_teacher_by_testID(1, 1);
+
 -- Tạo bài test
 
 CREATE OR REPLACE PROCEDURE create_test(
@@ -37,7 +41,7 @@ CREATE OR REPLACE PROCEDURE create_test(
     testtime_input INT,
     timeopen_input TIMESTAMP,
     timeclose_input TIMESTAMP,
-    teacherID_input TEXT,
+    teacherID_input INT,
     numberquestion_input INT
 )
 LANGUAGE plpgsql
@@ -47,6 +51,8 @@ BEGIN
     VALUES (title_input, description_input, passcode_input, testtime_input, timeopen_input, timeclose_input, teacherID_input, numberquestion_input);
 END;
 $$;
+
+-- CALL create_test('Bài kiểm tra Toán', 'Đề kiểm tra học kỳ môn Toán', '111111', 60, '2025-04-01 08:00:00', '2025-04-01 10:00:00', 1, 10);
 
 -- Chỉnh sửa thông tin của bài test
 
@@ -58,7 +64,7 @@ CREATE OR REPLACE PROCEDURE edit_test(
     testtime_input INT,
     timeopen_input TIMESTAMP,
     timeclose_input TIMESTAMP,
-    teacherID_input TEXT
+    teacherID_input INT
 )
 LANGUAGE plpgsql
 AS $$
@@ -79,6 +85,7 @@ BEGIN
     END IF;
 END;
 $$;
+
 
 -- Xóa bài test
 
