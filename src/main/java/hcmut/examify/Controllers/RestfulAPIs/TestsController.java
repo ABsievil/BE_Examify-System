@@ -2,11 +2,7 @@ package hcmut.examify.Controllers.RestfulAPIs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import hcmut.examify.DTOs.ResponseObject;
 import hcmut.examify.DTOs.TestsDTO;
@@ -18,9 +14,13 @@ public class TestsController {
     @Autowired
     private TestsService testsService;
 
+    @GetMapping
+    public ResponseEntity<ResponseObject> getTests() {
+        return testsService.FNC_getAllTests();
+    }
+
     @PostMapping
-    public ResponseEntity<ResponseObject> addStudent(@RequestBody TestsDTO testsDTO){
-        
+    public ResponseEntity<ResponseObject> addTest(@RequestBody TestsDTO testsDTO){
         return testsService.PROC_addTest(testsDTO);
     }
 
