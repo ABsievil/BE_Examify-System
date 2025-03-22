@@ -13,6 +13,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- SELECT get_all_answer_of_question(1);
+
 -- Lấy nội dung của 1 answer bằng answerID
 
 CREATE OR REPLACE FUNCTION get_answer_of_question_by_answerID(question_id INT, answer_id INT)
@@ -28,6 +30,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- SELECT get_answer_of_question_by_answerID(1, 1);
+
 -- Tạo bài Answer
 
 CREATE OR REPLACE PROCEDURE create_answer(content_input TEXT, iscorrect_input BOOLEAN, question_id_input INT)
@@ -39,16 +43,18 @@ BEGIN
 END;
 $$;
 
+-- CALL create_answer('a+b=0', false, 1)
+
 -- Chỉnh sửa thông tin của Answer
-CREATE OR REPLACE PROCEDURE edit_answer(answer_id INT, content_input TEXT, iscorrect_input FLOAT, question_id_input INT)
+CREATE OR REPLACE PROCEDURE edit_answer(answer_id INT, content_input TEXT, iscorrect_input BOOLEAN, question_id_input INT)
 LANGUAGE plpgsql
 AS $$
 BEGIN
     UPDATE Answer
     SET 
-        Content = COALESCE(title_input, Title),
-        IsCorrect = COALESCE(description_input, Description),
-        QuestionID = COALESCE(passcode_input, Passcode)
+        Content = COALESCE(content_input, Content),
+        IsCorrect = COALESCE(iscorrect_input, IsCorrect),
+        QuestionID = COALESCE(question_id_input, QuestionID)
     WHERE ID = answer_id;
     
     IF NOT FOUND THEN
@@ -56,6 +62,8 @@ BEGIN
     END IF;
 END;
 $$;
+
+-- CALL edit_answer(61, '2x+y=0', null, 1)
 
 -- Xóa bài Answer
 CREATE OR REPLACE PROCEDURE delete_answer(answer_id INT)
@@ -72,3 +80,5 @@ BEGIN
     END IF;
 END;
 $$;
+
+-- CALL delete_answer(61)
