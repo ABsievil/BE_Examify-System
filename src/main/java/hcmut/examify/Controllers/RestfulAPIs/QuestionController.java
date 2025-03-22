@@ -19,8 +19,8 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping
-    public ResponseEntity<ResponseObject> FNC_getAllQuestions() {
-        return questionService.FNC_getAllQuestions();
+    public ResponseEntity<ResponseObject> FNC_getAllQuestions(@PathVariable Long testId) {
+        return questionService.FNC_getAllQuestions(testId);
     }
 
     @GetMapping("/{questionId}")

@@ -20,10 +20,10 @@ public class QuestionService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public ResponseEntity<ResponseObject> FNC_getAllQuestions() {
+    public ResponseEntity<ResponseObject> FNC_getAllQuestions(Long testId) {
         try {
             String questions = jdbcTemplate.queryForObject(
-                    "SELECT get_all_question_of_test()",
+                    "SELECT get_all_question_of_test(testId)",
                     String.class
             );
             if (questions == null) {

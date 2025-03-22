@@ -15,8 +15,9 @@ public class TestsController {
     private TestsService testsService;
 
     @GetMapping
-    public ResponseEntity<ResponseObject> getTests() {
-        return testsService.FNC_getAllTests();
+    public ResponseEntity<ResponseObject> getTests(@RequestParam("teacherId") Long teacherId) {
+
+        return testsService.FNC_getAllTests(teacherId);
     }
 
     @GetMapping("/{id}")
