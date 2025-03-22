@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.3.9</version>
+		<version>3.3.8</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>hcmut</groupId>
@@ -93,10 +93,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt-jackson</artifactId>
-			<version>${jjwt.version}</version>
-			<scope>runtime</scope>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>annotationProcessor</scope>
 		</dependency>
 	</dependencies>
 
@@ -108,5 +107,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
