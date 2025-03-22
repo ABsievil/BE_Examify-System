@@ -137,21 +137,31 @@ public class TestsService {
             // Sau đó, thêm các câu hỏi và câu trả lời
             for (QuestionDTO question : testsDTO.getQuestions()) {
                 System.out.println("question: " + question);
-
-                Integer questionId = jdbcTemplate.queryForObject(
-                    "SELECT add_question(?, ?, ?)",
-                    Integer.class,
-                    question.getContent(),
-                    question.getScore(),
-                    newTestId
+                
+                // Lưu ý: Không sử dụng cú pháp {CALL ...} ở đây vì gây lỗi với database/driver hiện tại
+                Integer questionId = jdbcTemplate.execute(
+                    "CALL create_question(?, ?, ?, ?)",
+                    (CallableStatementCallback<Integer>) cs -> {
+                        cs.setString(1, question.getContent());
+                        cs.setFloat(2, question.getScore());
+                        cs.setInt(3, newTestId);
+                        
+                        // Đăng ký tham số OUT
+                        cs.registerOutParameter(4, Types.INTEGER);
+                        
+                        cs.execute();
+                        
+                        // Lấy giá trị đầu ra
+                        return cs.getInt(4);
+                    }
                 );
                 
                 System.out.println("questionId: " + questionId);
-
+    
                 // Thêm các câu trả lời cho mỗi câu hỏi
                 for (AnswerDTO answer : question.getAnswers()) {
                     jdbcTemplate.execute(
-                        "SELECT add_answer(?, ?, ?)",
+                        "CALL create_answer(?, ?, ?)",
                         (PreparedStatementCallback<Void>) ps -> {
                             ps.setString(1, answer.getContent());
                             ps.setBoolean(2, answer.getIsCorrect());
