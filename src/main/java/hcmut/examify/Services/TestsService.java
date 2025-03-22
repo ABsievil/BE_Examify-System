@@ -70,7 +70,7 @@ public class TestsService {
     public ResponseEntity<ResponseObject> FNC_getTestById(Long id) {
         try {
             String test = jdbcTemplate.queryForObject(
-                    "SELECT get_test_of_teacher_by_testID()",
+                    "SELECT get_test_of_teacher_by_testID(id)",
                     String.class
             );
             if (test == null) {

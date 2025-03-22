@@ -13,7 +13,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/tests/{testId}/questions")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -23,9 +23,11 @@ public class QuestionController {
         return questionService.FNC_getAllQuestions();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> FNC_getQuestionById(@PathVariable Long id) {
-        return questionService.FNC_getQuestionById(id);
+    @GetMapping("/{questionId}")
+    public ResponseEntity<ResponseObject> FNC_getQuestionById(
+            @PathVariable Long testId,
+            @PathVariable Long questionId) {
+        return questionService.FNC_getQuestionById(testId, questionId);
     }
 
 }

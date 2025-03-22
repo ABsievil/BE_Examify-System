@@ -50,10 +50,10 @@ public class QuestionService {
         }
     }
 
-    public ResponseEntity<ResponseObject> FNC_getQuestionById(Long id) {
+    public ResponseEntity<ResponseObject> FNC_getQuestionById(Long testId, Long questionId) {
         try {
             String question = jdbcTemplate.queryForObject(
-                    "SELECT get_question_of_test_by_questionID()",
+                    "SELECT get_question_of_test_by_questionID(testId, questionId)",
                     String.class
             );
             if (question == null) {
