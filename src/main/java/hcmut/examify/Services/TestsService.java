@@ -37,7 +37,7 @@ public class TestsService {
         this.objectMapper = objectMapper;
     }
 
-    public ResponseEntity<ResponseObject> FNC_getAllTests(Long teacherId) {
+    public ResponseEntity<ResponseObject> FNC_getAllTests(Integer teacherId) {
         try {
             String tests = jdbcTemplate.queryForObject(
                     "SELECT get_all_test_of_teacher(?)",

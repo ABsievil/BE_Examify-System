@@ -15,14 +15,15 @@ public class TestsController {
     @Autowired
     private TestsService testsService;
 
-    @GetMapping
-    public ResponseEntity<ResponseObject> getTests(@RequestParam("teacherId") Long teacherId) {
-
+    @GetMapping("/getTeacherId")
+    public ResponseEntity<ResponseObject> getAllTests(@RequestParam("teacherId") Integer teacherId) {
+        System.out.println("teacherId: " + teacherId);
         return testsService.FNC_getAllTests(teacherId);
     }
 
     @GetMapping("/{testId}")
-    public ResponseEntity<ResponseObject> getTestById(@PathVariable Long testId,
+    public ResponseEntity<ResponseObject> getTestById(
+        @PathVariable Long testId,
         @RequestParam("teacherId") Long teacherId) {
         return testsService.FNC_getTestById(teacherId, testId);
     }
