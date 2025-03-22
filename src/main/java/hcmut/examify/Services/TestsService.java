@@ -24,6 +24,7 @@ import hcmut.examify.DTOs.AnswerDTO;
 import hcmut.examify.DTOs.QuestionDTO;
 import hcmut.examify.DTOs.ResponseObject;
 import hcmut.examify.DTOs.TestsDTO;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class TestsService {
@@ -63,6 +64,36 @@ public class TestsService {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "Error getting FNC_getAllTests(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getTestById(Long id) {
+        try {
+            String test = jdbcTemplate.queryForObject(
+                    "SELECT get_test_of_teacher_by_testID()",
+                    String.class
+            );
+            if (test == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("OK", "Query to get FNC_getTestById() successfully with data = null", test));
+            }
+
+            JsonNode jsonNode = objectMapper.readTree(test);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getTestById() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Error getting FNC_getTestById(): " + e.getMessage(), null));
         }
     }
 
