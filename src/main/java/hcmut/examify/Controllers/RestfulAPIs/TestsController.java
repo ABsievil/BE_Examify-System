@@ -31,10 +31,4 @@ public class TestsController {
     public ResponseEntity<ResponseObject> addTest(@RequestBody TestsDTO testsDTO){
         return testsService.PROC_addTest(testsDTO);
     }
-
-   @PostMapping("/questions")
-   public ResponseEntity<ResponseObject> addQuestion(@RequestBody QuestionDTO questionDTO){
-       return testsService.PROC_addQuestion(questionDTO);
-   }
-
 }
