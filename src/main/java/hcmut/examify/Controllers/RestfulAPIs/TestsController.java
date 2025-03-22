@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import hcmut.examify.DTOs.QuestionDTO;
 import hcmut.examify.DTOs.ResponseObject;
 import hcmut.examify.DTOs.TestsDTO;
 import hcmut.examify.Services.TestsService;
@@ -29,6 +30,11 @@ public class TestsController {
     @PostMapping
     public ResponseEntity<ResponseObject> addTest(@RequestBody TestsDTO testsDTO){
         return testsService.PROC_addTest(testsDTO);
+    }
+
+    @PostMapping("/question")
+    public ResponseEntity<ResponseObject> addQuestion(@RequestBody QuestionDTO questionDTO){
+        return testsService.PROC_addQuestion(questionDTO);
     }
 
 }
