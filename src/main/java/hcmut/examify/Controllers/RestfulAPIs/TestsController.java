@@ -29,6 +29,6 @@ public class TestsController {
 
     @PostMapping
     public ResponseEntity<ResponseObject> addTest(@RequestBody TestsDTO testsDTO){
-        return testsService.PROC_addTest(testsDTO);
+        return testsService.FNC_addTest(testsDTO);
     }
 }

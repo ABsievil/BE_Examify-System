@@ -54,6 +54,51 @@ $$;
 
 -- CALL create_test('Bài kiểm tra Toán', 'Đề kiểm tra học kỳ môn Toán', '111111', 60, '2025-04-01 08:00:00', '2025-04-01 10:00:00', 1, 10);
 
+-- convert to func for this procedure:
+CREATE OR REPLACE FUNCTION add_test(
+    title_input TEXT,
+    description_input TEXT,
+    testtime_input INT,
+    timeopen_input TIMESTAMP,
+    timeclose_input TIMESTAMP,
+    teacherID_input INT,
+    numberquestion_input INT
+)
+RETURNS INT AS $$
+DECLARE
+    new_id INT;
+    passcode_text TEXT;
+    attempt INT := 0;
+    max_attempts INT := 100;
+BEGIN
+    -- Sinh passcode ngẫu nhiên và kiểm tra tính duy nhất
+    LOOP
+        -- Tạo chuỗi 6 chữ số ngẫu nhiên (000000 - 999999)
+        passcode_text := LPAD(FLOOR(RANDOM() * 1000000)::TEXT, 6, '0');
+        
+        -- Kiểm tra xem passcode đã tồn tại trong bảng Test chưa
+        IF NOT EXISTS (SELECT 1 FROM Test WHERE Passcode = passcode_text) THEN
+            EXIT; -- Thoát vòng lặp nếu passcode chưa tồn tại
+        END IF;
+        
+        -- Tăng số lần thử và kiểm tra giới hạn
+        attempt := attempt + 1;
+        IF attempt >= max_attempts THEN
+            RAISE EXCEPTION 'Không thể sinh passcode duy nhất sau % lần thử', max_attempts;
+        END IF;
+    END LOOP;
+    
+    -- Chèn dữ liệu vào bảng Test với passcode đã sinh
+    INSERT INTO Test (Title, Description, Passcode, TestTime, TimeOpen, TimeClose, TeacherID, NumberQuestion)
+    VALUES (title_input, description_input, passcode_text, testtime_input, timeopen_input, timeclose_input, teacherID_input, numberquestion_input)
+    RETURNING ID INTO new_id;
+    
+    RETURN new_id;
+END;
+$$ LANGUAGE plpgsql;
+-- SELECT add_test('Bài kiểm tra Toán', 'Đề kiểm tra học kỳ môn Toán', '111111', 60, '2025-04-01 08:00:00', '2025-04-01 10:00:00', 1, 10);
+
+
 -- Chỉnh sửa thông tin của bài test
 
 CREATE OR REPLACE PROCEDURE edit_test(

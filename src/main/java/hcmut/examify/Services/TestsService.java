@@ -97,7 +97,86 @@ public class TestsService {
     }
 
 
-    public ResponseEntity<ResponseObject> PROC_addTest(TestsDTO testsDTO) {
+    // public ResponseEntity<ResponseObject> PROC_addTest(TestsDTO testsDTO) {
+    //     try {
+    //         // Định dạng cho ISO 8601 và định dạng SQL
+    //         DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
+    //         DateTimeFormatter sqlFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    //         // Chuyển đổi timeOpen
+    //         LocalDateTime timeOpen = LocalDateTime.parse(testsDTO.getTimeOpen(), isoFormatter);
+    //         String formattedTimeOpen = timeOpen.format(sqlFormatter);
+
+    //         // Chuyển đổi timeClose
+    //         LocalDateTime timeClose = LocalDateTime.parse(testsDTO.getTimeClose(), isoFormatter);
+    //         String formattedTimeClose = timeClose.format(sqlFormatter);
+
+    //         jdbcTemplate.execute(
+    //             "CALL create_test(?, ?, ?, ?, ?, ?, ?)",
+    //             (PreparedStatementCallback<Void>) ps -> {
+    //                 ps.setString(1, testsDTO.getTitle());
+    //                 ps.setString(2, testsDTO.getDescription());
+    //                 ps.setInt(3, testsDTO.getTestTime());
+    //                 ps.setTimestamp(4, Timestamp.valueOf(formattedTimeOpen)); // Truyền Timestamp
+    //                 ps.setTimestamp(5, Timestamp.valueOf(formattedTimeClose)); // Truyền Timestamp
+    //                 ps.setInt(6, testsDTO.getTeacherId());
+    //                 ps.setInt(7, testsDTO.getNumberOfQuestion());
+
+    //                 ps.execute();
+    //                 return null;
+    //             }
+    //         );
+            
+
+    //         // code chạy đéo dc, proc trên đổi thành func để lấy testId cho 2 method dưới đây
+    //         // Sau đó, thêm các câu hỏi và câu trả lời
+    //         for (QuestionDTO question : testsDTO.getQuestions()) {
+    //             Long questionId = jdbcTemplate.execute(
+    //                 "CALL add_question(?, ?, ?)",
+    //                 (PreparedStatementCallback<Long>) ps -> {
+    //                     ps.setLong(1, testId);
+    //                     ps.setString(2, question.getContent());
+    //                     ps.setDouble(3, question.getScore());
+                        
+    //                     // Đăng ký tham số OUT để nhận question_id được tạo
+    //                     ps.registerOutParameter(4, Types.BIGINT);
+                        
+    //                     ps.execute();
+                        
+    //                     // Lấy question_id được trả về từ stored procedure
+    //                     return ps.getLong(4);
+    //                 }
+    //             );
+                
+    //             // Thêm các câu trả lời cho mỗi câu hỏi
+    //             for (AnswerDTO answer : question.getAnswers()) {
+    //                 jdbcTemplate.execute(
+    //                     "CALL add_answer(?, ?, ?)",
+    //                     (PreparedStatementCallback<Void>) ps -> {
+    //                         ps.setLong(1, questionId);
+    //                         ps.setString(2, answer.getContent());
+    //                         ps.setBoolean(3, answer.getIsCorrect());
+                            
+    //                         ps.execute();
+    //                         return null;
+    //                     }
+    //                 );
+    //             }
+    //         }
+
+
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //             .body(new ResponseObject("OK", "Query to update PROC_addTest() successfully", null));
+    //     } catch (DataAccessException e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "Error updating PROC_addTest(): " + e.getMessage(), null));
+    //     }
+    // }
+
+    public ResponseEntity<ResponseObject> FNC_addTest(TestsDTO testsDTO) {
         try {
             // Định dạng cho ISO 8601 và định dạng SQL
             DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
@@ -110,30 +189,36 @@ public class TestsService {
             // Chuyển đổi timeClose
             LocalDateTime timeClose = LocalDateTime.parse(testsDTO.getTimeClose(), isoFormatter);
             String formattedTimeClose = timeClose.format(sqlFormatter);
-
-            jdbcTemplate.execute(
-                "CALL create_test(?, ?, ?, ?, ?, ?, ?)",
-                (PreparedStatementCallback<Void>) ps -> {
-                    ps.setString(1, testsDTO.getTitle());
-                    ps.setString(2, testsDTO.getDescription());
-                    ps.setInt(3, testsDTO.getTestTime());
-                    ps.setTimestamp(4, Timestamp.valueOf(formattedTimeOpen)); // Truyền Timestamp
-                    ps.setTimestamp(5, Timestamp.valueOf(formattedTimeClose)); // Truyền Timestamp
-                    ps.setInt(6, testsDTO.getTeacherId());
-                    ps.setInt(7, testsDTO.getNumberOfQuestion());
-
-                    ps.execute();
-                    return null;
-                }
+            
+            // The most likely error occurs at Timestamp
+            Integer testId = jdbcTemplate.queryForObject(
+                    "SELECT add_test(?, ?, ?, ?, ?, ?, ?)",
+                    Integer.class, 
+                    testsDTO.getTitle(),
+                    testsDTO.getDescription(),  
+                    testsDTO.getTestTime(),
+                    Timestamp.valueOf(formattedTimeOpen),
+                    Timestamp.valueOf(formattedTimeClose),
+                    testsDTO.getTeacherId(),
+                    testsDTO.getNumberOfQuestion()
             );
+
+
+            if (testId == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully with data = null", null));
+            }
+
+
             return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Query to update PROC_addTest() successfully", null));
+                    .body(new ResponseObject("OK", "Query to get FNC_getAllTests() successfully", null));
+
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+                    .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Error updating PROC_addTest(): " + e.getMessage(), null));
+                    .body(new ResponseObject("ERROR", "Error getting FNC_getAllTests(): " + e.getMessage(), null));
         }
     }
 }
