@@ -37,10 +37,10 @@ public class TestsService {
         this.objectMapper = objectMapper;
     }
 
-    public ResponseEntity<ResponseObject> FNC_getAllTests() {
+    public ResponseEntity<ResponseObject> FNC_getAllTests(Long teacherId) {
         try {
             String tests = jdbcTemplate.queryForObject(
-                    "SELECT get_all_test_of_teacher()",
+                    "SELECT get_all_test_of_teacher(teacherId)",
                     String.class
             );
             if (tests == null) {
@@ -70,7 +70,7 @@ public class TestsService {
     public ResponseEntity<ResponseObject> FNC_getTestById(Long id) {
         try {
             String test = jdbcTemplate.queryForObject(
-                    "SELECT get_test_of_teacher_by_testID()",
+                    "SELECT get_test_of_teacher_by_testID(id)",
                     String.class
             );
             if (test == null) {
