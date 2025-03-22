@@ -22,7 +22,7 @@ public class WhiteList {
         "/api/v1/Email/**",
         "/api/v1/Student/createNewPassword",
         "/api/v1/Student/addStudent",
-        "/tests"
+        "/tests/**"
     };
 
     private String[] RESOURCE_LIST_URL = {
