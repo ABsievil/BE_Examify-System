@@ -86,6 +86,7 @@ BEGIN
 END;
 $$;
 
+-- CALL edit_test(1, null, null, 15, 75, '2025-05-01 08:00:00', '2025-05-01 09:15:00', 1);
 
 -- Xóa bài test
 
@@ -103,3 +104,6 @@ BEGIN
     END IF;
 END;
 $$;
+
+-- CALL delete_test(5)
+
