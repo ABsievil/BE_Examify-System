@@ -100,8 +100,6 @@ public class TestsService {
 
     public ResponseEntity<ResponseObject> PROC_addTest(TestsDTO testsDTO) {
         try {
-            System.out.println("testsDTO: " + testsDTO);
-
             // Định dạng cho ISO 8601 và định dạng SQL
             DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
             DateTimeFormatter sqlFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -140,5 +138,32 @@ public class TestsService {
                 .body(new ResponseObject("ERROR", "Error updating PROC_addTest(): " + e.getMessage(), null));
         }
     }
+
+    // public ResponseEntity<ResponseObject> PROC_addQuestion(QuestionDTO questionDTO) {
+    //     try {
+    //         jdbcTemplate.execute(
+    //             "CALL create_test(?, ?, ?, ?, ?, ?, ?, ?)",
+    //             (PreparedStatementCallback<Void>) ps -> {
+    //                 ps.setString(1, questionDTO.getTitle());
+    //                 ps.setString(2, questionDTO.getDescription());
+    //                 ps.setString(3, questionDTO.getPasscode());
+    //                 ps.setInt(4, questionDTO.getTestTime());
+    //                 ps.setInt(7, questionDTO.getTeacherId());
+    //                 ps.setInt(8, questionDTO.getNumberOfQuestion());
+
+    //                 ps.execute();
+    //                 return null;
+    //             }
+    //         );
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //             .body(new ResponseObject("OK", "Query to update PROC_addQuestion() successfully", null));
+    //     } catch (DataAccessException e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "Error updating PROC_addQuestion(): " + e.getMessage(), null));
+    //     }
+    // }
 
 }
