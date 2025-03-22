@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 public class TestsDTO {
     private String title;
     private String description;
-    private String passcode;
     private Integer testTime;
     private String timeOpen;
     private String timeClose;
