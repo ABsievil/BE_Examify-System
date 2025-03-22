@@ -32,9 +32,9 @@ public class TestsController {
         return testsService.PROC_addTest(testsDTO);
     }
 
-//    @PostMapping("/questions")
-//    public ResponseEntity<ResponseObject> addQuestion(@RequestBody QuestionDTO questionDTO){
-//        return testsService.PROC_addQuestion(questionDTO);
-//    }
+   @PostMapping("/questions")
+   public ResponseEntity<ResponseObject> addQuestion(@RequestBody QuestionDTO questionDTO){
+       return testsService.PROC_addQuestion(questionDTO);
+   }
 
 }

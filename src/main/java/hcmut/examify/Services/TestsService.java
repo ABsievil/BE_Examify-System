@@ -112,16 +112,15 @@ public class TestsService {
             String formattedTimeClose = timeClose.format(sqlFormatter);
 
             jdbcTemplate.execute(
-                "CALL create_test(?, ?, ?, ?, ?, ?, ?, ?)",
+                "CALL create_test(?, ?, ?, ?, ?, ?, ?)",
                 (PreparedStatementCallback<Void>) ps -> {
                     ps.setString(1, testsDTO.getTitle());
                     ps.setString(2, testsDTO.getDescription());
-                    ps.setString(3, testsDTO.getPasscode());
-                    ps.setInt(4, testsDTO.getTestTime());
-                    ps.setTimestamp(5, Timestamp.valueOf(formattedTimeOpen)); // Truyền Timestamp
-                    ps.setTimestamp(6, Timestamp.valueOf(formattedTimeClose)); // Truyền Timestamp
-                    ps.setInt(7, testsDTO.getTeacherId());
-                    ps.setInt(8, testsDTO.getNumberOfQuestion());
+                    ps.setInt(3, testsDTO.getTestTime());
+                    ps.setTimestamp(4, Timestamp.valueOf(formattedTimeOpen)); // Truyền Timestamp
+                    ps.setTimestamp(5, Timestamp.valueOf(formattedTimeClose)); // Truyền Timestamp
+                    ps.setInt(6, testsDTO.getTeacherId());
+                    ps.setInt(7, testsDTO.getNumberOfQuestion());
 
                     ps.execute();
                     return null;
@@ -137,32 +136,4 @@ public class TestsService {
                 .body(new ResponseObject("ERROR", "Error updating PROC_addTest(): " + e.getMessage(), null));
         }
     }
-
-    // public ResponseEntity<ResponseObject> PROC_addQuestion(QuestionDTO questionDTO) {
-    //     try {
-    //         jdbcTemplate.execute(
-    //             "CALL create_test(?, ?, ?, ?, ?, ?, ?, ?)",
-    //             (PreparedStatementCallback<Void>) ps -> {
-    //                 ps.setString(1, questionDTO.getTitle());
-    //                 ps.setString(2, questionDTO.getDescription());
-    //                 ps.setString(3, questionDTO.getPasscode());
-    //                 ps.setInt(4, questionDTO.getTestTime());
-    //                 ps.setInt(7, questionDTO.getTeacherId());
-    //                 ps.setInt(8, questionDTO.getNumberOfQuestion());
-
-    //                 ps.execute();
-    //                 return null;
-    //             }
-    //         );
-    //         return ResponseEntity.status(HttpStatus.OK)
-    //             .body(new ResponseObject("OK", "Query to update PROC_addQuestion() successfully", null));
-    //     } catch (DataAccessException e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //             .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //             .body(new ResponseObject("ERROR", "Error updating PROC_addQuestion(): " + e.getMessage(), null));
-    //     }
-    // }
-
 }
