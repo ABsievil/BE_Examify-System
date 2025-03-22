@@ -52,7 +52,7 @@ public class TestsService {
             );
             
             // Sau đó, thêm các câu hỏi và câu trả lời
-            for (QuestionDTO question : testsDTO.getQuestions()) {
+            for (QuestionDTO question : testsDTO.getQestions()) {
                 Long questionId = jdbcTemplate.execute(
                     "CALL create_question(?, ?, ?)",
                     (CallableStatementCallback<Long>) cs -> {
