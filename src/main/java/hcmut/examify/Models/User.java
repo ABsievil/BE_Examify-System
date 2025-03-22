@@ -23,9 +23,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "account")
 public class User {
     @Id
-    @Column(name = "id", nullable = false, unique = true)
-    private Long id;
-
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 

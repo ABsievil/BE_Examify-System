@@ -1,6 +1,6 @@
 -- Lấy thông tin tất cả bài test
 
-CREATE OR REPLACE FUNCTION get_all_test_of_teacher(teacher_id TEXT)
+CREATE OR REPLACE FUNCTION get_all_test_of_teacher(teacher_id INT)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
@@ -13,9 +13,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- SELECT get_all_test_of_teacher(1);
+
 -- Lấy thông tin một bài test dựa trên testID
 
-CREATE OR REPLACE FUNCTION get_test_of_teacher_by_testID(teacher_id TEXT, test_id INT)
+CREATE OR REPLACE FUNCTION get_test_of_teacher_by_testID(teacher_id INT, test_id INT)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
@@ -28,24 +30,29 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- SELECT get_test_of_teacher_by_testID(1, 1);
+
 -- Tạo bài test
 
 CREATE OR REPLACE PROCEDURE create_test(
     title_input TEXT,
     description_input TEXT,
-    numberquestion_input INT,
+    passcode_input TEXT,
     testtime_input INT,
     timeopen_input TIMESTAMP,
     timeclose_input TIMESTAMP,
-    teacherID_input TEXT
+    teacherID_input INT,
+    numberquestion_input INT
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    INSERT INTO Test (Title, Description, NumberQuestion, TestTime, TimeOpen, TimeClose, TeacherID)
-    VALUES (title_input, description_input, numberquestion_input, testtime_input, timeopen_input, timeclose_input, teacherID_input);
+    INSERT INTO Test (Title, Description, Passcode, TestTime, TimeOpen, TimeClose, TeacherID, NumberQuestion)
+    VALUES (title_input, description_input, passcode_input, testtime_input, timeopen_input, timeclose_input, teacherID_input, numberquestion_input);
 END;
 $$;
+
+-- CALL create_test('Bài kiểm tra Toán', 'Đề kiểm tra học kỳ môn Toán', '111111', 60, '2025-04-01 08:00:00', '2025-04-01 10:00:00', 1, 10);
 
 -- Chỉnh sửa thông tin của bài test
 
@@ -57,7 +64,7 @@ CREATE OR REPLACE PROCEDURE edit_test(
     testtime_input INT,
     timeopen_input TIMESTAMP,
     timeclose_input TIMESTAMP,
-    teacherID_input TEXT
+    teacherID_input INT
 )
 LANGUAGE plpgsql
 AS $$
@@ -79,6 +86,8 @@ BEGIN
 END;
 $$;
 
+-- CALL edit_test(1, null, null, 15, 75, '2025-05-01 08:00:00', '2025-05-01 09:15:00', 1);
+
 -- Xóa bài test
 
 CREATE OR REPLACE PROCEDURE delete_test(test_id INT)
@@ -95,3 +104,6 @@ BEGIN
     END IF;
 END;
 $$;
+
+-- CALL delete_test(5)
+
