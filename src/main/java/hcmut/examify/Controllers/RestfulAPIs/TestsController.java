@@ -19,6 +19,11 @@ public class TestsController {
         return testsService.FNC_getAllTests();
     }
 
+    @GetMapping
+    public ResponseEntity<ResponseObject> getTestById(@RequestParam("testId") Long testId) {
+        return testsService.FNC_getTestById(testId);
+    }
+
     @PostMapping
     public ResponseEntity<ResponseObject> addTest(@RequestBody TestsDTO testsDTO){
         return testsService.PROC_addTest(testsDTO);
