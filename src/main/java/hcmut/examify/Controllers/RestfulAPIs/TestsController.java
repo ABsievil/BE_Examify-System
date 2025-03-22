@@ -18,8 +18,10 @@ public class TestsController {
     @Autowired
     private TestsService testsService;
 
-    @PostMapping("/test")
+    @PostMapping
     public ResponseEntity<ResponseObject> addStudent(@RequestBody TestsDTO testsDTO){
+        
         return testsService.PROC_addTest(testsDTO);
     }
+
 }

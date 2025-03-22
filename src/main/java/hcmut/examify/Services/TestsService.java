@@ -35,7 +35,7 @@ public class TestsService {
         try {
             // Đầu tiên, thêm thông tin cơ bản của bài kiểm tra và lấy ID được tạo
             Long testId = jdbcTemplate.execute(
-                "CALL create_test(?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                "CALL create_test(?, ?, ?, ?, ?, ?, ?, ?)",
                 (PreparedStatementCallback<Long>) ps -> {
                     ps.setString(1, testsDTO.getTitle());
                     ps.setString(2, testsDTO.getDescription());
@@ -50,40 +50,7 @@ public class TestsService {
                     return null;
                 }
             );
-            
-            // Sau đó, thêm các câu hỏi và câu trả lời
-            for (QuestionDTO question : testsDTO.getQuestions()) {
-                Long questionId = jdbcTemplate.execute(
-                    "CALL create_question(?, ?, ?)",
-                    (CallableStatementCallback<Long>) cs -> {
-                        cs.setString(1, question.getContent());
-                        cs.setDouble(2, question.getScore());
-                        
-                        // Đăng ký tham số OUT để nhận question_id được tạo
-                        cs.registerOutParameter(3, Types.BIGINT);
-                        
-                        cs.execute();
-                        
-                        // Lấy question_id được trả về từ stored procedure
-                        return cs.getLong(3);
-                    }
-                );
-                
-                // Thêm các câu trả lời cho mỗi câu hỏi
-                for (AnswerDTO answer : question.getAnswers()) {
-                    jdbcTemplate.execute(
-                        "CALL create_answer(?, ?, ?)",
-                        (PreparedStatementCallback<Void>) ps -> {
-                            ps.setString(1, answer.getContent());
-                            ps.setBoolean(2, answer.getIsCorrect());
-                            
-                            ps.execute();
-                            return null;
-                        }
-                    );
-                }
-            }
-            
+        
             return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseObject("OK", "Thêm bài kiểm tra thành công", testId));
                 

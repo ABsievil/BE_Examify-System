@@ -17,5 +17,4 @@ public class TestsDTO {
     private ZonedDateTime timeClose;
     private Long teacherId;
     private Integer numberOfQuestion;
-    private List<QuestionDTO> questions;
 }
