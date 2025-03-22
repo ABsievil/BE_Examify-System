@@ -67,10 +67,10 @@ public class TestsService {
         }
     }
 
-    public ResponseEntity<ResponseObject> FNC_getTestById(Long id) {
+    public ResponseEntity<ResponseObject> FNC_getTestById(Long teacherId, Long testId) {
         try {
             String test = jdbcTemplate.queryForObject(
-                    "SELECT get_test_of_teacher_by_testID(id)",
+                    "SELECT get_test_of_teacher_by_testID(teacherId, testId)",
                     String.class
             );
             if (test == null) {

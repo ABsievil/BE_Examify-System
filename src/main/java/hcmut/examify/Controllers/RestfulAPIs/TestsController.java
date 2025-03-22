@@ -20,9 +20,10 @@ public class TestsController {
         return testsService.FNC_getAllTests(teacherId);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseObject> getTestById(@PathVariable Long id) {
-        return testsService.FNC_getTestById(id);
+    @GetMapping("/{testId}")
+    public ResponseEntity<ResponseObject> getTestById(@PathVariable Long testId,
+        @RequestParam("teacherId") Long teacherId) {
+        return testsService.FNC_getTestById(teacherId, testId);
     }
 
     @PostMapping
