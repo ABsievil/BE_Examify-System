@@ -23,9 +23,9 @@ public class QuestionController {
         return questionService.FNC_getAllQuestions();
     }
 
-    @GetMapping
-    public ResponseEntity<ResponseObject> FNC_getQuestionById(@RequestParam("testId") Long questionId) {
-        return questionService.FNC_getQuestionById(questionId);
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseObject> FNC_getQuestionById(@PathVariable Long id) {
+        return questionService.FNC_getQuestionById(id);
     }
 
 }
