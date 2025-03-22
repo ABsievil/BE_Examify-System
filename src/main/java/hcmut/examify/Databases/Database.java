@@ -27,9 +27,9 @@
 //         return new CommandLineRunner() {
 //             @Override
 //             public void run(String... args) throws Exception {
-//                 User user1 = new User("user", passwordEncoder.encode("1245"), "nccuong@gmail.com", Role.STUDENT, null);
+//                 User user1 = new User("user", passwordEncoder.encode("1245"), "1", Role.STUDENT);
 //                 logger.info("insert user account: " + userRepository.save(user1));
-//                 User admin = new User("admin", passwordEncoder.encode("1245"), "nccuong317qb@gmail.com", Role.TEACHER, null);
+//                 User admin = new User("admin", passwordEncoder.encode("1245"), "2", Role.TEACHER);
 //                 logger.info("insert admin account: " + userRepository.save(admin));
 //             }
 //         };
