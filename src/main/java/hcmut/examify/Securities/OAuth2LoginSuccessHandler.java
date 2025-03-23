@@ -54,60 +54,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Lazy   // not best solution
     PasswordEncoder passwordEncoder;
 
-    // @Override
-    // public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-    //                                     Authentication authentication) throws IOException, ServletException {
-        
-    //     OAuth2User principal = (OAuth2User) authentication.getPrincipal();
-    //     // String email = (String) principal.getAttribute("email");       // error: github not public email
-    //     String nameUser = (String) principal.getName();
-    //     User user = userRepository.findByUsername(nameUser);
-    //     Optional<User> optionalUser = Optional.ofNullable(user);
-
-    //     // Nếu trong db đã có user này thì tạo token với userid
-    //     optionalUser.ifPresentOrElse(u -> {
-    //         String token = jwtUtilities.generateToken(u.getUsername(), u.getRole().toString(), 
-    //             u.getUserid() != null ? u.getUserid().toString() : "");
-    //         Cookie cookie = new Cookie("jwt", token);
-    //         cookie.setHttpOnly(true); 
-    //         cookie.setPath("/");
-    //         cookie.setMaxAge(3600); 
-    //         response.addCookie(cookie);
-            
-    //     }, () -> { // Ngược lại thì tạo user mới và token mới
-
-    //         // Đầu tiên, tạo DBUser mới trong bảng users
-    //         DBUser dbUser = dbUserRepository.createAndSaveUser(nameUser, nameUser + "@oauth2.com", LocalDate.now());
-            
-    //         // Sau khi lưu, lấy ID được tạo tự động
-    //         Long dbUserId = dbUser.getId();
-            
-    //         // Tạo User trong bảng account và liên kết với DBUser
-    //         User userEntity = new User();
-    //         userEntity.setUsername(nameUser);
-    //         // userEntity.setEmail(nameUser);
-    //         userEntity.setPassword(nameUser);
-    //         userEntity.setRole(Role.STUDENT);
-    //         // Thiết lập userid liên kết với id từ bảng users
-    //         userEntity.setUserid(dbUserId.intValue());
-    //         userRepository.save(userEntity);
-
-    //         String token = jwtUtilities.generateToken(nameUser, Role.STUDENT.toString(), dbUserId);
-    //         Cookie cookie = new Cookie("jwt", token);
-    //         cookie.setHttpOnly(true); 
-    //         cookie.setPath("/");
-    //         cookie.setMaxAge(3600); 
-    //         response.addCookie(cookie);
-    //     });
-
-    //     // super.onAuthenticationSuccess(request, response, authentication);
-    //     getRedirectStrategy().sendRedirect(request, response, "/home");    
-    // }
-
-    
-
-
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
