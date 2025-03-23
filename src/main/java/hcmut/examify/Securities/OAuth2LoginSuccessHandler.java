@@ -51,25 +51,31 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         User user = userRepository.findByUsername(nameUser);
         Optional<User> optionalUser = Optional.ofNullable(user);
 
+        // Nếu trong db đã có user này thì tạo token với userid
         optionalUser.ifPresentOrElse(u -> {
-            String token = jwtUtilities.generateToken(u.getUsername(), u.getRole().toString(), u.getUserid());
+            String token = jwtUtilities.generateToken(u.getUsername(), u.getRole().toString(), 
+                u.getUserid() != null ? u.getUserid().toString() : "");
             Cookie cookie = new Cookie("jwt", token);
             cookie.setHttpOnly(true); 
             cookie.setPath("/");
             cookie.setMaxAge(3600); 
             response.addCookie(cookie);
         }, () -> {
+            // Ngược lại thì tạo user mới và token mới
             // save user into db to checking with jwt token on later request
             User userEntity = new User();
             userEntity.setUsername(nameUser);
             // userEntity.setEmail(nameUser);
             userEntity.setPassword(nameUser);
             userEntity.setRole(Role.STUDENT);
+            // Không thiết lập userid - sẽ được liên kết với ID từ bảng Users sau
             userRepository.save(userEntity);
 
-            // Sau khi lưu, cần lấy lại user để có userid mới tạo
+            // Tạo token mới không có userid (hoặc với userid là null)
             User savedUser = userRepository.findByUsername(nameUser);
-            String token = jwtUtilities.generateToken(nameUser, Role.STUDENT.toString(), savedUser.getUserid());
+            String savedUserId = savedUser != null ? savedUser.getUserid().toString() : "";
+
+            String token = jwtUtilities.generateToken(nameUser, Role.STUDENT.toString(), savedUserId);
             Cookie cookie = new Cookie("jwt", token);
             cookie.setHttpOnly(true); 
             cookie.setPath("/");

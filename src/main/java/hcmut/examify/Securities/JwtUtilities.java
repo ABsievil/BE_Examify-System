@@ -51,7 +51,8 @@ public class JwtUtilities {
     }
 
     public String extractUserId(String token) {
-        return extractClaim(token, claims -> claims.get("userId", String.class));
+        Object userId = extractClaim(token, claims -> claims.get("userId"));
+        return userId != null ? userId.toString() : null;
     }
 
     public Date extractExpiration(String token) { return extractClaim(token, Claims::getExpiration); }
@@ -75,11 +76,11 @@ public class JwtUtilities {
                 .compact();
     }
 
-    public String generateToken(String username, String role, String userId) {
+    public String generateToken(String username, String role, Object userId) {
         return  Jwts.builder()
                 .setSubject(username)
                 .claim("role",role)
-                .claim("userId", userId)
+                .claim("userId", userId != null ? userId.toString() : "")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(Date.from(Instant.now().plus(jwtExpiration, ChronoUnit.MILLIS)))
                 .signWith(SignatureAlgorithm.HS256, secret)
