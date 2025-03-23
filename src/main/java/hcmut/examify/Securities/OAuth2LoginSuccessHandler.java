@@ -52,7 +52,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         Optional<User> optionalUser = Optional.ofNullable(user);
 
         optionalUser.ifPresentOrElse(u -> {
-            String token = jwtUtilities.generateToken(u.getUsername(), u.getRole().toString());
+            String token = jwtUtilities.generateToken(u.getUsername(), u.getRole().toString(), u.getUserid());
             Cookie cookie = new Cookie("jwt", token);
             cookie.setHttpOnly(true); 
             cookie.setPath("/");
@@ -67,7 +67,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             userEntity.setRole(Role.STUDENT);
             userRepository.save(userEntity);
 
-            String token = jwtUtilities.generateToken(nameUser, Role.STUDENT.toString());
+            // Sau khi lưu, cần lấy lại user để có userid mới tạo
+            User savedUser = userRepository.findByUsername(nameUser);
+            String token = jwtUtilities.generateToken(nameUser, Role.STUDENT.toString(), savedUser.getUserid());
             Cookie cookie = new Cookie("jwt", token);
             cookie.setHttpOnly(true); 
             cookie.setPath("/");

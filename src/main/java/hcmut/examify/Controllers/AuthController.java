@@ -72,7 +72,7 @@ public class AuthController {
             }
             // Trả về token cho người dùng.
             String role = user.getRole().toString();
-            String token = jwtUtilities.generateToken(user.getUsername(), role);
+            String token = jwtUtilities.generateToken(user.getUsername(), role, user.getUserid());
 
             // Thiết lập cookie với các flags bảo mật
             Cookie cookie = new Cookie("jwt", token);
@@ -129,7 +129,7 @@ public class AuthController {
             }
             // Trả về token cho người dùng.
             String role = user.getRole().toString();
-            String token = jwtUtilities.generateToken(user.getUsername(), role);
+            String token = jwtUtilities.generateToken(user.getUsername(), role, user.getUserid());
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("OK", "Query to checkJwt successfully", token));
 

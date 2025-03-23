@@ -82,6 +82,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             
             if(token != null && jwtUtilities.validateToken(token)){
                 String uname = jwtUtilities.extractUsername(token);
+                String userId = jwtUtilities.extractUserId(token);
+                
+                // Lưu userId vào request attribute để các controller có thể sử dụng
+                request.setAttribute("userId", userId);
                 
                 UserDetails userDetails = customUserDetailsService.loadUserByUsername(uname);
                 if(userDetails != null){
