@@ -20,7 +20,7 @@ public class QuestionService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public ResponseEntity<ResponseObject> FNC_getAllQuestions(Long testId) {
+    public ResponseEntity<ResponseObject> FNC_getAllQuestions(Integer testId) {
         try {
             String questions = jdbcTemplate.queryForObject(
                     "SELECT get_all_question_of_test(?)",
@@ -50,7 +50,7 @@ public class QuestionService {
         }
     }
 
-    public ResponseEntity<ResponseObject> FNC_getQuestionById(Long testId, Long questionId) {
+    public ResponseEntity<ResponseObject> FNC_getQuestionById(Integer testId, Integer questionId) {
         try {
             String question = jdbcTemplate.queryForObject(
                     "SELECT get_question_of_test_by_questionID(?, ?)",

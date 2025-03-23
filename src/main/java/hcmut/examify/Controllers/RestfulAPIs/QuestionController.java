@@ -19,14 +19,14 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping
-    public ResponseEntity<ResponseObject> FNC_getAllQuestions(@PathVariable Long testId) {
+    public ResponseEntity<ResponseObject> FNC_getAllQuestions(@PathVariable Integer testId) {
         return questionService.FNC_getAllQuestions(testId);
     }
 
     @GetMapping("/{questionId}")
     public ResponseEntity<ResponseObject> FNC_getQuestionById(
-            @PathVariable Long testId,
-            @PathVariable Long questionId) {
+            @PathVariable Integer testId,
+            @PathVariable Integer questionId) {
         return questionService.FNC_getQuestionById(testId, questionId);
     }
 

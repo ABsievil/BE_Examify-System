@@ -22,8 +22,8 @@ public class TestsController {
 
     @GetMapping("/{testId}")
     public ResponseEntity<ResponseObject> getTestById(
-        @PathVariable Long testId,
-        @RequestParam("teacherId") Long teacherId) {
+        @PathVariable Integer testId,
+        @RequestParam("teacherId") Integer teacherId) {
         return testsService.FNC_getTestById(teacherId, testId);
     }
 
