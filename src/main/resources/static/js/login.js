@@ -1,4 +1,4 @@
-const baseUrl = "http://localhost:8090";
+const baseUrl = "https://examify-server.azurewebsites.net";
 
 document.addEventListener('DOMContentLoaded', () => {
     document
