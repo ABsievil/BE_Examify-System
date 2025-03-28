@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hcmut.examify.DTOs.ResponseObject;
-import hcmut.examify.DTOs.TestsDTO;
 import hcmut.examify.Services.StudentService;
-import hcmut.examify.Services.TestsService;
 
 @RestController
 @RequestMapping("/students")
@@ -55,11 +53,13 @@ public class StudentController {
         return studentService.PROC_updateStudentAnswer(studentId, questionId, isCorrect, answerId);
     }
 
+    // NOTE: do not require endtime IN BODY -> studentid, testid, starttime
     @PostMapping("/{studentId}/results")
     public ResponseEntity<ResponseObject> createStudentResult(@RequestBody ResultDTO resultDTO) {
         return resultService.PROC_createResult(resultDTO);
     }
 
+    // NOTE: do not require starttime IN BODY -> studentid, testid, endtime
     @PutMapping("{studentId}/results")
     public ResponseEntity<ResponseObject> updateStudentResult(@RequestBody ResultDTO resultDTO) {
         return resultService.PROC_updateResult(resultDTO);
