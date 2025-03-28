@@ -1,5 +1,6 @@
 package hcmut.examify.Controllers.RestfulAPIs;
 
+import hcmut.examify.DTOs.AnswerDTO;
 import hcmut.examify.DTOs.ResultDTO;
 import hcmut.examify.Services.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hcmut.examify.DTOs.ResponseObject;
-import hcmut.examify.DTOs.TestsDTO;
 import hcmut.examify.Services.StudentService;
-import hcmut.examify.Services.TestsService;
 
 @RestController
 @RequestMapping("/students")
@@ -49,17 +48,18 @@ public class StudentController {
     @PutMapping("/{studentId}/answers/{answerId}")
     public ResponseEntity<ResponseObject> updateStudentAnswer(
         @PathVariable("studentId") Integer studentId,
-        @RequestParam("questionId") Integer questionId,
-        @RequestParam("isCorrect") Boolean isCorrect,
-        @PathVariable("answerId") Integer answerId) {
-        return studentService.PROC_updateStudentAnswer(studentId, questionId, isCorrect, answerId);
+        @PathVariable("answerId") Integer answerId,
+        @RequestBody AnswerDTO answerDTO ) {
+        return studentService.PROC_updateStudentAnswer(answerDTO, studentId, answerId);
     }
 
+    // NOTE: do not require endtime IN BODY -> studentid, testid, starttime
     @PostMapping("/{studentId}/results")
     public ResponseEntity<ResponseObject> createStudentResult(@RequestBody ResultDTO resultDTO) {
         return resultService.PROC_createResult(resultDTO);
     }
 
+    // NOTE: do not require starttime IN BODY -> studentid, testid, endtime
     @PutMapping("{studentId}/results")
     public ResponseEntity<ResponseObject> updateStudentResult(@RequestBody ResultDTO resultDTO) {
         return resultService.PROC_updateResult(resultDTO);
