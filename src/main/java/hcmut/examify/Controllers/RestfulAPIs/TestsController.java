@@ -1,5 +1,6 @@
 package hcmut.examify.Controllers.RestfulAPIs;
 
+import hcmut.examify.Services.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,8 @@ import hcmut.examify.Services.TestsService;
 public class TestsController {
     @Autowired
     private TestsService testsService;
+    @Autowired
+    private ResultService resultService;
 
     @GetMapping
     public ResponseEntity<ResponseObject> getAllTests(@RequestParam("teacherId") Integer teacherId) {
@@ -39,6 +42,11 @@ public class TestsController {
 
     @GetMapping("/{testId}/results")
     public ResponseEntity<ResponseObject> getTestResults(@PathVariable Integer testId) {
-        return testsService.FNC_getAllTestResults(testId);
+        return resultService.FNC_getAllTestResults(testId);
+    }
+
+    @GetMapping("/{testId}/students/{studentId}/results")
+    public ResponseEntity<ResponseObject> getResultByStudentIdAndTestId(@PathVariable Integer testId, @PathVariable Integer studentId) {
+        return resultService.FNC_getResultByStudentIdAndTestId(testId, studentId);
     }
 }

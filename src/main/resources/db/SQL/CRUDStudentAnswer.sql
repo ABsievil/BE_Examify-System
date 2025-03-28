@@ -1,3 +1,4 @@
+--PASS
 CREATE OR REPLACE FUNCTION get_studentAnswer(student_id INT, question_id INT)
 RETURNS JSON AS $$
 DECLARE
@@ -12,7 +13,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- select get_studentAnswer(1, 1);
-
+--PASS
 CREATE OR REPLACE PROCEDURE create_studentAnswer(student_id INT, question_id INT) 
 LANGUAGE plpgsql
 AS $$
@@ -23,8 +24,8 @@ END;
 $$;
 
 -- call create_studentAnswer(1, 2);
-
-CREATE OR REPLACE PROCEDURE update_studentAnswer(student_id INT, question_id INT, isCorrect_input BOOLEAN, answer_id INT) 
+--PASS
+CREATE OR REPLACE PROCEDURE update_studentAnswer(student_id INT, question_id INT, isCorrect_input BOOLEAN, answer_id TEXT) 
 LANGUAGE plpgsql
 AS $$
 BEGIN

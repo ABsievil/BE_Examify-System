@@ -356,33 +356,4 @@ public class TestsService {
                     .body(new ResponseObject("ERROR", "Error getting FNC_getAllTests(): " + e.getMessage(), null));
         }
     }
-
-    public ResponseEntity<ResponseObject> FNC_getAllTestResults(Integer testId) {
-        try {
-            String testResults = jdbcTemplate.queryForObject(
-                    "SELECT get_all_student_result(?)",
-                    String.class, testId
-            );
-
-            if (testResults == null) {
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("OK", "Query to get FNC_getAllTestResults() successfully with data = null", null));
-            }
-
-            JsonNode jsonNode = objectMapper.readTree(testResults);
-
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("OK", "Query to get FNC_getAllTestResults() successfully", jsonNode));
-
-        } catch (DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
-        } catch (JsonProcessingException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("ERROR", "Error getting FNC_getAllTestResults(): " + e.getMessage(), null));
-        }
-    }
 }

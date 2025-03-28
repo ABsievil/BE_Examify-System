@@ -13,8 +13,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- select get_all_student_result(1)
-
--- Lấy thông tin kết quả, bài làm của sinh viên bằng StudentID
+-- PASS
 CREATE OR REPLACE FUNCTION get_result_by_student_id(student_id INT, test_id INT)
 RETURNS JSON AS $$
 DECLARE
