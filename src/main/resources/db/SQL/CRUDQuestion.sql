@@ -13,6 +13,36 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION get_all_question_of_test(test_id INT)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+        'id', q.id,
+        'content', q.content,
+        'score', q.score,
+        'testid', q.testid,
+        'answers', COALESCE(
+            (SELECT jsonb_agg(jsonb_build_object(
+                'id', a.id,
+                'content', a.content,
+                'iscorrect', a.iscorrect,
+                'questionid', a.questionid
+            ))
+            FROM Answer a
+            WHERE a.questionid = q.id),
+            '[]'::json
+        )
+    )), '[]'::json)
+    INTO result
+    FROM Question q
+    WHERE q.testid = test_id;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
 -- SELECT get_all_question_of_test(1);
 
 -- Lấy nội dung của 1 question bằng questionID
