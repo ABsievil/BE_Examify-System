@@ -28,7 +28,20 @@ $$ LANGUAGE plpgsql;
 
 -- select get_result_by_student_id(1, 1)
 
-CREATE OR REPLACE PROCEDURE create_result(student_id INT, test_id INT, start_time TIMESTAMP, end_time TIMESTAMP) 
+CREATE OR REPLACE PROCEDURE create_result(student_id INT, test_id INT, start_time TIMESTAMP) 
+LANGUAGE plpgsql AS $$
+DECLARE
+    test_time INT;
+BEGIN
+    SELECT testTime INTO test_time FROM Test WHERE ID = test_id;
+
+    INSERT INTO Result(StudentID, TestID, TotalScore, StartTime, EndTime)
+    VALUES (student_id, test_id, 0, start_time, start_time + (test_time * interval '1 minute'));
+
+END;
+$$;
+
+CREATE OR REPLACE PROCEDURE update_result(student_id INT, test_id INT, end_time TIMESTAMP) 
 LANGUAGE plpgsql
 AS $$
 DECLARE
@@ -51,7 +64,10 @@ BEGIN
         total_score := 0;
     END IF;
 
-    INSERT INTO Result(StudentID, TestID, TotalScore, StartTime, EndTime)
-    VALUES (student_id, test_id, total_score, start_time, end_time);
+    UPDATE Result 
+    SET
+        TotalScore = COALESCE(total_score, TotalScore),
+        EndTime = COALESCE(end_time, EndTime)
+    WHERE StudentID = student_id AND TestID = test_id;
 END;
 $$;
