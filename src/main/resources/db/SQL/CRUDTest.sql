@@ -67,7 +67,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_test_of_teacher_by_testID(1, 1);
 
 -- Lấy thông tin bài test bằng passcode
-
+--PASS
 CREATE OR REPLACE FUNCTION get_test_by_passcode(passcode_input TEXT)
 RETURNS JSON AS $$
 DECLARE
@@ -186,7 +186,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT add_test('Bài kiểm tra Toán', 'Đề kiểm tra học kỳ môn Toán', '111111', 60, '2025-04-01 08:00:00', '2025-04-01 10:00:00', 1, 10);
 
 -- Chỉnh sửa thông tin của bài test
-
+-- PASS
 CREATE OR REPLACE PROCEDURE edit_test(
     test_id INT,
     title_input TEXT,

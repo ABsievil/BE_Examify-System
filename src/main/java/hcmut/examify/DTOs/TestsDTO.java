@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TestsDTO {
+    private Integer id;
     private String title;
     private String description;
     private Integer testTime;
