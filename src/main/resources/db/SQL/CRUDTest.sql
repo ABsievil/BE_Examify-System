@@ -66,6 +66,52 @@ $$ LANGUAGE plpgsql;
 
 -- SELECT get_test_of_teacher_by_testID(1, 1);
 
+-- Lấy thông tin những bài test mà sinh viên đã làm bằng StudentID 
+
+-- CREATE OR REPLACE FUNCTION get_test_of_student(student_id INT)
+-- RETURNS JSON AS $$
+-- DECLARE
+--     result JSON;
+-- BEGIN
+--     SELECT row_to_json(q) 
+--     INTO result
+--     FROM (SELECT * FROM Result r, Test t WHERE r.TestID = t.ID AND r.StudentID = student_id) AS q;
+
+--     RETURN result;
+-- END;
+-- $$ LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION get_results_of_student(student_id INT)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT COALESCE(
+        json_agg(json_build_object(
+            'testid', t.id,
+            'title', t.title,
+            'description', t.description,
+            'numberquestion', t.numberquestion,
+            'passcode', t.passcode,
+            'testtime', t.testtime,
+            'timeopen', t.timeopen,
+            'timeclose', t.timeclose,
+            'teacherid', t.teacherid,
+            'totalscore', r.totalscore,
+            'starttime', r.starttime,
+            'endtime', r.endtime
+        )),
+        '[]'::json
+    )
+    INTO result
+    FROM Result r
+    WHERE r.TestID = t.ID AND r.StudentID = student_id;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+
 -- Lấy thông tin bài test bằng passcode
 --PASS
 CREATE OR REPLACE FUNCTION get_test_by_passcode(passcode_input TEXT)
