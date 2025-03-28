@@ -68,6 +68,7 @@ $$ LANGUAGE plpgsql;
 -- CALL create_question('1+1=?', 2.0, 1);
 
 -- Chỉnh sửa thông tin của bài Question
+-- PASS
 CREATE OR REPLACE PROCEDURE edit_question(question_id INT, content_input TEXT, score_input FLOAT, testID_input INT)
 LANGUAGE plpgsql
 AS $$

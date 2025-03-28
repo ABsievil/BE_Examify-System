@@ -56,6 +56,7 @@ $$ LANGUAGE plpgsql;
 -- CALL create_answer('a+b=0', false, 1)
 
 -- Chỉnh sửa thông tin của Answer
+-- PASS
 CREATE OR REPLACE PROCEDURE edit_answer(answer_id INT, content_input TEXT, iscorrect_input BOOLEAN, question_id_input INT)
 LANGUAGE plpgsql
 AS $$
