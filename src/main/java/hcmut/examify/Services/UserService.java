@@ -1,5 +1,7 @@
 package hcmut.examify.Services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -107,4 +109,35 @@ public class UserService {
                 .body(new ResponseObject("ERROR", "Error updating PROC_changePassword(): " + e.getMessage(), null));
         }
     }
+
+    public ResponseEntity<ResponseObject> FNC_getUserInfo(Integer userId) {
+        try {
+            String userInfo = jdbcTemplate.queryForObject(
+                    "SELECT get_question_of_test_by_questionID(?, ?)",
+                    String.class, userId
+            );
+            if (userInfo == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("OK", "Query to get FNC_getUserInfo() successfully with data = null", userInfo));
+            }
+
+            JsonNode jsonNode = objectMapper.readTree(userInfo);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getUserInfo() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Error getting FNC_getUserInfo(): " + e.getMessage(), null));
+        }
+    }
+
 }
