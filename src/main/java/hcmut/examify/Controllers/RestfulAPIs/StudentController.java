@@ -1,5 +1,6 @@
 package hcmut.examify.Controllers.RestfulAPIs;
 
+import hcmut.examify.DTOs.ResultDTO;
 import hcmut.examify.Services.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,13 +50,24 @@ public class StudentController {
     public ResponseEntity<ResponseObject> updateStudentAnswer(
         @PathVariable("studentId") Integer studentId,
         @RequestParam("questionId") Integer questionId,
-        @RequestParam("isCorrect") Boolean isCorrect, 
+        @RequestParam("isCorrect") Boolean isCorrect,
         @PathVariable("answerId") Integer answerId) {
         return studentService.PROC_updateStudentAnswer(studentId, questionId, isCorrect, answerId);
+    }
+
+    @PostMapping("/{studentId}/results")
+    public ResponseEntity<ResponseObject> createStudentResult(@RequestBody ResultDTO resultDTO) {
+        return resultService.PROC_createResult(resultDTO);
+    }
+
+    @PutMapping("{studentId}/results")
+    public ResponseEntity<ResponseObject> updateStudentResult(@RequestBody ResultDTO resultDTO) {
+        return resultService.PROC_updateResult(resultDTO);
     }
 
     @GetMapping("/{studentId}/results")
     public ResponseEntity<ResponseObject> getAllTResultsOfStudent(@PathVariable Integer studentId) {
         return resultService.FNC_getAllResultsByStudentId(studentId);
     }
+
 }
