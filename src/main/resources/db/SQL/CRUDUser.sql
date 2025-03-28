@@ -1,3 +1,21 @@
+CREATE OR REPLACE FUNCTION get_user_infor(user_id INT)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT json_build_object(
+            'name', u.name,
+            'email', u.email,
+            'date of birth', u.dob
+        )
+    INTO result
+    FROM Users u
+    WHERE ID = user_id;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE OR REPLACE PROCEDURE add_user(username_input TEXT, password_input TEXT, role_input TEXT)
 AS $$
 DECLARE

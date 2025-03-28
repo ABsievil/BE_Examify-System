@@ -105,7 +105,7 @@ BEGIN
 
     UPDATE Result 
     SET
-        TotalScore = COALESCE(total_score, TotalScore),
+        TotalScore = COALESCE(10*total_score, TotalScore),
         EndTime = COALESCE(end_time, EndTime)
     WHERE StudentID = student_id AND TestID = test_id;
 END;
