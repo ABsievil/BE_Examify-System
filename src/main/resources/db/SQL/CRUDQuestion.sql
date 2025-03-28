@@ -18,13 +18,13 @@ RETURNS JSON AS $$
 DECLARE
     result JSON;
 BEGIN
-    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+    SELECT COALESCE(json_agg(json_build_object(
         'id', q.id,
         'content', q.content,
         'score', q.score,
         'testid', q.testid,
         'answers', COALESCE(
-            (SELECT jsonb_agg(jsonb_build_object(
+            (SELECT json_agg(json_build_object(
                 'id', a.id,
                 'content', a.content,
                 'iscorrect', a.iscorrect,
