@@ -24,7 +24,7 @@ $$;
 
 -- call create_studentAnswer(1, 2);
 
-CREATE OR REPLACE PROCEDURE update_studentAnswer(student_id INT, question_id INT, isCorrect_input BOOLEAN, answer_id TEXT) 
+CREATE OR REPLACE PROCEDURE update_studentAnswer(student_id INT, question_id INT, isCorrect_input BOOLEAN, answer_id INT) 
 LANGUAGE plpgsql
 AS $$
 BEGIN
