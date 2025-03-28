@@ -1,5 +1,5 @@
-CREATE OR REPLACE FUNCTION add_user(username_input TEXT, password_input TEXT, role_input TEXT) 
-RETURNS VOID AS $$
+CREATE OR REPLACE PROCEDURE add_user(username_input TEXT, password_input TEXT, role_input TEXT)
+AS $$
 DECLARE
     user_id INT;
 BEGIN
