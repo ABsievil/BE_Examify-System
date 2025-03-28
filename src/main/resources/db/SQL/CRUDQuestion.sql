@@ -11,7 +11,7 @@ BEGIN
         'score', q.score,
         'testid', q.testid,
         'answers', COALESCE(
-            (SELECT jsonb_agg(jsonb_build_object(
+            (SELECT json_agg(json_build_object(
                 'id', a.id,
                 'content', a.content,
                 'iscorrect', a.iscorrect,
