@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION create_user_and_account(username_input TEXT, password_input TEXT, role_input TEXT) 
+CREATE OR REPLACE FUNCTION add_user(username_input TEXT, password_input TEXT, role_input TEXT) 
 RETURNS VOID AS $$
 DECLARE
     user_id INT;
@@ -20,7 +20,7 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE PROCEDURE edit_user_infor(user_id INT, name_input TEXT, email_input TEXT, dob_input DATE)
+CREATE OR REPLACE PROCEDURE update_user_infor(user_id INT, name_input TEXT, email_input TEXT, dob_input DATE)
 LANGUAGE plpgsql
 AS $$
 BEGIN
