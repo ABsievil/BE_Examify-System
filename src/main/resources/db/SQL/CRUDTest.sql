@@ -80,6 +80,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- select get_test_by_passcode('23456789');
+
 -- Tạo bài test
 --PASS
 -- Bản test procedure sử dụng tính năng inout parameter để trả về ID của bài test vừa tạo và generate passcode ngẫu nhiên
