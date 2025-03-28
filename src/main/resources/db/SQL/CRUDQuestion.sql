@@ -5,7 +5,7 @@ RETURNS JSON AS $$
 DECLARE
     result JSON;
 BEGIN
-    SELECT COALESCE(jsonb_agg(jsonb_build_object(
+    SELECT COALESCE(json_agg(json_build_object(
         'id', q.id,
         'content', q.content,
         'score', q.score,
