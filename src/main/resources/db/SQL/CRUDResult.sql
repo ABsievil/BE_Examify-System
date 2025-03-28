@@ -14,7 +14,7 @@ $$ LANGUAGE plpgsql;
 
 -- select get_all_student_result(1)
 -- PASS
-CREATE OR REPLACE FUNCTION get_result_by_student_id(student_id INT, test_id INT)
+CREATE OR REPLACE FUNCTION get_result_by_student_id_and_test_id(student_id INT, test_id INT)
 RETURNS JSON AS $$
 DECLARE
     test_result JSON;

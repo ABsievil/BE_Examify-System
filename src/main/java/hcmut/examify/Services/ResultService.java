@@ -82,7 +82,7 @@ public class ResultService {
     public ResponseEntity<ResponseObject> FNC_getResultByStudentIdAndTestId(Integer testId, Integer studentId) {
         try {
             String studentTestResult = jdbcTemplate.queryForObject(
-                    "SELECT get_result_by_student_id(?, ?)",
+                    "SELECT get_result_by_student_id_and_test_id(?, ?)",
                     String.class, studentId, testId
             );
 
