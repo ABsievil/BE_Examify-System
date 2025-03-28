@@ -40,6 +40,11 @@ public class TestsController {
         return testsService.PROC_updateTest(testsDTO);
     }
 
+    @DeleteMapping
+    public ResponseEntity<ResponseObject> deleteTest(@RequestParam("testId") Integer testId){
+        return testsService.PROC_deleteTest(testId);
+    }
+
     @GetMapping("/{testId}/results")
     public ResponseEntity<ResponseObject> getAllResults(@PathVariable Integer testId) {
         return resultService.FNC_getAllTestResults(testId);
