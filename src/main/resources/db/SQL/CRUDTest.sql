@@ -81,6 +81,7 @@ $$ LANGUAGE plpgsql;
 -- END;
 -- $$ LANGUAGE plpgsql;
 
+-- PASS
 CREATE OR REPLACE FUNCTION get_results_of_student(student_id INT)
 RETURNS JSON AS $$
 DECLARE
