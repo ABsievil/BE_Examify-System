@@ -54,8 +54,7 @@ $$ LANGUAGE plpgsql;
 
 -- SELECT get_test_of_teacher_by_testID(1, 1);
 
--- Tạo bài test
-
+-- Tạo bài tes
 CREATE OR REPLACE PROCEDURE create_test(
     title_input TEXT,
     description_input TEXT,
@@ -162,7 +161,6 @@ END;
 $$;
 
 -- Chỉnh sửa thông tin của bài test
-
 CREATE OR REPLACE PROCEDURE edit_test(
     test_id INT,
     title_input TEXT,

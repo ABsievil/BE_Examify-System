@@ -1,5 +1,5 @@
 -- Lấy thông tin tất cả answer của question
-
+-- pasS
 CREATE OR REPLACE FUNCTION get_all_answer_of_question(question_id INT)
 RETURNS JSON AS $$
 DECLARE

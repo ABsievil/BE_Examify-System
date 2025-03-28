@@ -31,4 +31,9 @@ public class TestsController {
     public ResponseEntity<ResponseObject> addTest(@RequestBody TestsDTO testsDTO){
         return testsService.PROC_createTest(testsDTO);
     }
+
+    @PutMapping
+    public ResponseEntity<ResponseObject> updateTest(@RequestBody TestsDTO testsDTO){
+        return testsService.PROC_updateTest(testsDTO);
+    }
 }
