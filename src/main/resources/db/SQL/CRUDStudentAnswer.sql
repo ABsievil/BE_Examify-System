@@ -28,12 +28,19 @@ $$;
 CREATE OR REPLACE PROCEDURE update_studentAnswer(student_id INT, question_id INT, isCorrect_input BOOLEAN, answer_id TEXT) 
 LANGUAGE plpgsql
 AS $$
+DECLARE 
+    test_id INT;
+    end_time TIMESTAMP;
 BEGIN
     UPDATE StudentAnswer
     SET
         isCorrect = isCorrect_input,
         answerID = answer_id
     WHERE StudentID = student_id AND QuestionID = question_id;
+    SELECT TestID INTO test_id FROM Question WHERE ID = question_id;
+    SELECT Endtime INTO end_time FROM Result WHERE StudentID = student_id AND TestID = test_id;
+    CALL update_result(student_id, test_id, end_time);
+
 END;
 $$;
 
