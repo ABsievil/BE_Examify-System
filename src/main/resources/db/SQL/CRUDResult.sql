@@ -4,9 +4,17 @@ RETURNS JSON AS $$
 DECLARE
     result JSON;
 BEGIN
-    SELECT row_to_json(q) 
+    SELECT json_agg(json_build_object(
+            'studentID', r.StudentID,
+            'studentName', u.name,
+            'totalScore', r.totalScore,
+            'startTime', r.starttime,
+            'endTime', r.endtime
+        )
+    )
     INTO result
-    FROM (SELECT * FROM Result WHERE TestID = test_id) AS q;
+    FROM Result r, Users u
+    WHERE r.StudentID = u.ID AND r.TestID = test_id;
 
     RETURN result;
 END;
@@ -83,7 +91,7 @@ BEGIN
 
     SELECT COALESCE(SUM(q.score), 0) INTO score_of_answer
     FROM question q, studentanswer sa
-    WHERE sa.StudentID = student_id AND sa.TestID = test_id AND q.ID = sa.questionID AND sa.isCorrect = true; 
+    WHERE q.ID = sa.questionID AND sa.StudentID = student_id AND q.TestID = test_id  AND sa.isCorrect = true; 
 
     SELECT COALESCE(SUM(score), 0) INTO score_of_question
     FROM question q
