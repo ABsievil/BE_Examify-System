@@ -14,18 +14,50 @@ $$ LANGUAGE plpgsql;
 
 -- select get_all_student_result(1)
 
+-- Lấy thông tin kết quả, bài làm của sinh viên bằng StudentID
 CREATE OR REPLACE FUNCTION get_result_by_student_id(student_id INT, test_id INT)
 RETURNS JSON AS $$
 DECLARE
-    result JSON;
+    test_result JSON;
+    question_infor JSON;
 BEGIN
-    SELECT row_to_json(q) 
-    INTO result
-    FROM (SELECT * FROM Result WHERE StudentID = student_id AND TestID = test_id) AS q;
+    SELECT row_to_json(tr) 
+    INTO test_result
+    FROM (SELECT * FROM Result WHERE StudentID = student_id AND TestID = test_id) AS tr;
 
-    RETURN result;
+    SELECT COALESCE(
+        json_agg(json_build_object(
+            'id', q.id,
+            'content', q.content,
+            'score', q.score,
+            'testid', q.testid,
+            'answers', COALESCE(
+                (SELECT json_agg(json_build_object(
+                    'id', a.id,
+                    'content', a.content,
+                    'iscorrect', a.iscorrect
+                ))
+                FROM Answer a
+                WHERE a.questionid = q.id),
+                '[]'::json 
+            ),
+            'answerid', sa.answerid,
+            'iscorrect', sa.iscorrect
+        )),
+        '[]'::json
+    )
+    INTO question_infor
+    FROM Question q, StudentAnswer sa
+    WHERE q.testid = test_id AND sa.StudentID = student_id AND sa.QuestionID = q.id;
+
+    RETURN json_build_object(
+        'result', test_result,
+        'questions', question_infor
+    );
 END;
 $$ LANGUAGE plpgsql;
+
+select get_result_by_student_id(1, 1)
 
 -- select get_result_by_student_id(1, 1)
 
