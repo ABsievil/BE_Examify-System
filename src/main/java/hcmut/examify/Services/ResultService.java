@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hcmut.examify.DTOs.ResponseObject;
+import hcmut.examify.DTOs.ResultDTO;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -53,19 +54,19 @@ public class ResultService {
     public ResponseEntity<ResponseObject> FNC_getAllResultsByStudentId(Integer studentId) {
         try {
             String resultsOfStudent = jdbcTemplate.queryForObject(
-                    "SELECT get_result_by_student_id(?)",
+                    "SELECT get_results_of_student(?)",
                     String.class, studentId
             );
 
             if (resultsOfStudent == null) {
                 return ResponseEntity.status(HttpStatus.OK)
-                        .body(new ResponseObject("OK", "Query to get FNC_getResultByStudentIdAndTestId() successfully with data = null", null));
+                        .body(new ResponseObject("OK", "Query to get FNC_getAllResultsByStudentId() successfully with data = null", null));
             }
 
             JsonNode jsonNode = objectMapper.readTree(resultsOfStudent);
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("OK", "Query to get FNC_getResultByStudentIdAndTestId() successfully", jsonNode));
+                    .body(new ResponseObject("OK", "Query to get FNC_getAllResultsByStudentId() successfully", jsonNode));
 
         } catch (DataAccessException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -75,7 +76,7 @@ public class ResultService {
                     .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("ERROR", "Error getting FNC_getResultByStudentIdAndTestId(): " + e.getMessage(), null));
+                    .body(new ResponseObject("ERROR", "Error getting FNC_getAllResultsByStudentId(): " + e.getMessage(), null));
         }
     }
 
@@ -106,5 +107,13 @@ public class ResultService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "Error getting FNC_getResultByStudentIdAndTestId(): " + e.getMessage(), null));
         }
+    }
+
+    public ResponseEntity<ResponseObject> PROC_createResult(ResultDTO resultDTO) {
+
+    }
+
+    public ResponseEntity<ResponseObject> PROC_updateResult(ResultDTO resultDTO) {
+
     }
 }
