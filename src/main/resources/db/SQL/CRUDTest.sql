@@ -37,7 +37,18 @@ BEGIN
                 'id', q.id,
                 'content', q.content,
                 'score', q.score,
-                'testid', q.testid
+                'testid', q.testid,
+                'answers', COALESCE(
+                    (SELECT json_agg(json_build_object(
+                        'id', a.id,
+                        'content', a.content,
+                        'iscorrect', a.iscorrect,
+                        'questionid', a.questionid
+                    ))
+                    FROM Answer a
+                    WHERE a.questionid = q.id),
+                    '[]'::json 
+                )
             ))
             FROM Question q
             WHERE q.testid = t.id),
@@ -47,9 +58,10 @@ BEGIN
     INTO result
     FROM Test t
     WHERE t.teacherid = teacher_id AND t.id = test_id;
-
+    
     RETURN result;
 END;
+
 $$ LANGUAGE plpgsql;
 
 -- SELECT get_test_of_teacher_by_testID(1, 1);
