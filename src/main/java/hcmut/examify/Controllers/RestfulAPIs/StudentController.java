@@ -1,5 +1,6 @@
 package hcmut.examify.Controllers.RestfulAPIs;
 
+import hcmut.examify.DTOs.AnswerDTO;
 import hcmut.examify.DTOs.ResultDTO;
 import hcmut.examify.Services.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +48,9 @@ public class StudentController {
     @PutMapping("/{studentId}/answers/{answerId}")
     public ResponseEntity<ResponseObject> updateStudentAnswer(
         @PathVariable("studentId") Integer studentId,
-        @RequestParam("questionId") Integer questionId,
-        @RequestParam("isCorrect") Boolean isCorrect,
-        @PathVariable("answerId") Integer answerId) {
-        return studentService.PROC_updateStudentAnswer(studentId, questionId, isCorrect, answerId);
+        @PathVariable("answerId") Integer answerId,
+        @RequestBody AnswerDTO answerDTO ) {
+        return studentService.PROC_updateStudentAnswer(answerDTO, studentId, answerId);
     }
 
     // NOTE: do not require endtime IN BODY -> studentid, testid, starttime

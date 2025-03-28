@@ -1,5 +1,6 @@
 package hcmut.examify.Services;
 
+import hcmut.examify.DTOs.AnswerDTO;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,14 +110,14 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseObject> PROC_updateStudentAnswer(Integer studentId, Integer questionId, Boolean isCorrect, Integer answerId){
+    public ResponseEntity<ResponseObject> PROC_updateStudentAnswer(AnswerDTO answerDTO, Integer studentId, Integer answerId){
         try {
             jdbcTemplate.execute(
             "CALL update_studentAnswer(?, ?, ?, ?)",
             (PreparedStatementCallback<Void>) ps -> {
                 ps.setInt(1, studentId);
-                ps.setInt(2, questionId);
-                ps.setBoolean(3, isCorrect);
+                ps.setInt(2, answerDTO.getQuestionId());
+                ps.setBoolean(3, answerDTO.getIsCorrect());
                 ps.setInt(4, answerId);
  
                 ps.execute();
