@@ -22,9 +22,31 @@ RETURNS JSON AS $$
 DECLARE
     result JSON;
 BEGIN
-    SELECT row_to_json(t) 
+    SELECT json_build_object(
+        'id', t.id,
+        'title', t.title,
+        'description', t.description,
+        'numberquestion', t.numberquestion,
+        'passcode', t.passcode,
+        'testtime', t.testtime,
+        'timeopen', t.timeopen,
+        'timeclose', t.timeclose,
+        'teacherid', t.teacherid,
+        'questions', COALESCE(
+            (SELECT json_agg(json_build_object(
+                'id', q.id,
+                'content', q.content,
+                'score', q.score,
+                'testid', q.testid
+            ))
+            FROM Question q
+            WHERE q.testid = t.id),
+            '[]'::json
+        )
+    )
     INTO result
-    FROM (SELECT * FROM Test WHERE TeacherID = teacher_id AND ID = test_id) AS t;
+    FROM Test t
+    WHERE t.teacherid = teacher_id AND t.id = test_id;
 
     RETURN result;
 END;
