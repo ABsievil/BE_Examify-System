@@ -8,16 +8,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hcmut.examify.DTOs.ResponseObject;
+import hcmut.examify.Services.StudentService;
 import hcmut.examify.Services.TestsService;
 
 @RestController
 @RequestMapping("/students")
 public class StudentController {
      @Autowired
-    private TestsService testsService;
+    private StudentService studentService;
 
     @GetMapping("/tests")
     public ResponseEntity<ResponseObject> getTestByPasscode(@RequestParam("passcode") String passcode) {
-        return testsService.FNC_getTestInforByPasscode(passcode);
+        return studentService.FNC_getTestInforByPasscode(passcode);
     }
 }

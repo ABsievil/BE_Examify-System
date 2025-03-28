@@ -67,7 +67,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_test_of_teacher_by_testID(1, 1);
 
 -- Lấy thông tin bài test bằng passcode
-
+--PASS
 CREATE OR REPLACE FUNCTION get_test_by_passcode(passcode_input TEXT)
 RETURNS JSON AS $$
 DECLARE
