@@ -11,6 +11,8 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- select get_all_student_result(1)
+
 CREATE OR REPLACE FUNCTION get_result_by_student_id(student_id INT, test_id INT)
 RETURNS JSON AS $$
 DECLARE
@@ -24,15 +26,30 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- select get_result_by_student_id(1, 1)
+
 CREATE OR REPLACE PROCEDURE create_result(student_id INT, test_id INT, start_time TIMESTAMP, end_time TIMESTAMP) 
 LANGUAGE plpgsql
 AS $$
 DECLARE
+    score_of_answer FLOAT;
+    score_of_question FLOAT;
     total_score FLOAT := 0;
 BEGIN
-    SELECT SUM(score) INTO total_score
+
+    SELECT COALESCE(SUM(q.score), 0) INTO score_of_answer
     FROM question q, studentanswer sa
     WHERE sa.StudentID = student_id AND sa.TestID = test_id AND q.ID = sa.questionID AND sa.isCorrect = true; 
+
+    SELECT COALESCE(SUM(score), 0) INTO score_of_question
+    FROM question q
+    WHERE q.TestID = test_id;
+
+    IF score_of_question > 0 THEN
+        total_score := score_of_answer / score_of_question;
+    ELSE
+        total_score := 0;
+    END IF;
 
     INSERT INTO Result(StudentID, TestID, TotalScore, StartTime, EndTime)
     VALUES (student_id, test_id, total_score, start_time, end_time);
