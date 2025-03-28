@@ -22,13 +22,13 @@ public class TestsController {
 
     @GetMapping("/{testId}")
     public ResponseEntity<ResponseObject> getTestById(
-        @PathVariable Long testId,
-        @RequestParam("teacherId") Long teacherId) {
+        @PathVariable Integer testId,
+        @RequestParam("teacherId") Integer teacherId) {
         return testsService.FNC_getTestById(teacherId, testId);
     }
 
     @PostMapping
     public ResponseEntity<ResponseObject> addTest(@RequestBody TestsDTO testsDTO){
-        return testsService.PROC_addTest(testsDTO);
+        return testsService.PROC_createTest(testsDTO);
     }
 }

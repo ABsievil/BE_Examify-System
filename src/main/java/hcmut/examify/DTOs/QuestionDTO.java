@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QuestionDTO {
     private String content;
-    private Double score;
+    private Float score;
     private List<AnswerDTO> answers;
 }

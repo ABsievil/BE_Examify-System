@@ -29,8 +29,8 @@ public class User {
     @Column(name = "password", nullable = false, unique = false)
     private String password;
 
-    @Column(name = "userid", nullable = false, unique = true)
-    private String userid;
+    @Column(name = "userid", nullable = true, unique = true)
+    private Integer userid;
 
     @Column(name= "role")
     @Enumerated(EnumType.STRING)
