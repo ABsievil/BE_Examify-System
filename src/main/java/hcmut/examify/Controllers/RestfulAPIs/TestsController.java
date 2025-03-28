@@ -36,4 +36,9 @@ public class TestsController {
     public ResponseEntity<ResponseObject> updateTest(@RequestBody TestsDTO testsDTO){
         return testsService.PROC_updateTest(testsDTO);
     }
+
+    @GetMapping("/{testId}/results")
+    public ResponseEntity<ResponseObject> getTestResults(@PathVariable Integer testId) {
+        return testsService.FNC_getAllTestResults(testId);
+    }
 }
