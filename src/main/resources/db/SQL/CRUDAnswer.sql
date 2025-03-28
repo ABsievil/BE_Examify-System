@@ -17,23 +17,23 @@ $$ LANGUAGE plpgsql;
 
 -- Lấy nội dung của 1 answer bằng answerID
 
-CREATE OR REPLACE FUNCTION get_answer_of_question_by_answerID(question_id INT, answer_id INT)
-RETURNS JSON AS $$
-DECLARE
-    result JSON;
-BEGIN
-    SELECT row_to_json(q) 
-    INTO result
-    FROM (SELECT * FROM Answer WHERE QuestionID = question_id AND ID = answer_id) AS q;
+-- CREATE OR REPLACE FUNCTION get_answer_of_question_by_answerID(question_id INT, answer_id INT)
+-- RETURNS JSON AS $$
+-- DECLARE
+--     result JSON;
+-- BEGIN
+--     SELECT row_to_json(q) 
+--     INTO result
+--     FROM (SELECT * FROM Answer WHERE QuestionID = question_id AND ID = answer_id) AS q;
 
-    RETURN result;
-END;
-$$ LANGUAGE plpgsql;
+--     RETURN result;
+-- END;
+-- $$ LANGUAGE plpgsql;
 
 -- SELECT get_answer_of_question_by_answerID(1, 1);
 
 -- Tạo bài Answer
-
+--PASS
 CREATE OR REPLACE PROCEDURE create_answer(content_input TEXT, iscorrect_input BOOLEAN, question_id_input INT)
 LANGUAGE plpgsql
 AS $$
@@ -42,7 +42,7 @@ BEGIN
     VALUES (content_input, iscorrect_input, question_id_input);
 END;
 $$;
-
+--PASS
 CREATE OR REPLACE FUNCTION add_answer(
     content_input TEXT, 
     iscorrect_input BOOLEAN, 
@@ -77,19 +77,19 @@ $$;
 -- CALL edit_answer(61, '2x+y=0', null, 1)
 
 -- Xóa bài Answer
-CREATE OR REPLACE PROCEDURE delete_answer(answer_id INT)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-    DELETE FROM Answer
-    WHERE ID = answer_id;
+-- CREATE OR REPLACE PROCEDURE delete_answer(answer_id INT)
+-- LANGUAGE plpgsql
+-- AS $$
+-- BEGIN
+--     DELETE FROM Answer
+--     WHERE ID = answer_id;
     
-    IF NOT FOUND THEN
-        RAISE NOTICE 'No answer found with ID %', answer_id;
-    ELSE
-        RAISE NOTICE 'Answer ID % deleted successfully', answer_id;
-    END IF;
-END;
-$$;
+--     IF NOT FOUND THEN
+--         RAISE NOTICE 'No answer found with ID %', answer_id;
+--     ELSE
+--         RAISE NOTICE 'Answer ID % deleted successfully', answer_id;
+--     END IF;
+-- END;
+-- $$;
 
 -- CALL delete_answer(61)

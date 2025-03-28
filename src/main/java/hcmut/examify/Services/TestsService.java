@@ -356,4 +356,28 @@ public class TestsService {
                     .body(new ResponseObject("ERROR", "Error getting FNC_getAllTests(): " + e.getMessage(), null));
         }
     }
+
+    public ResponseEntity<ResponseObject> PROC_deleteTest(Integer testId){
+        try {
+            jdbcTemplate.execute(
+            "CALL delete_test(?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setInt(1, testId);
+ 
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_deleteTest() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_deleteTest(): " + e.getMessage(), null));
+        }
+    }
 }
