@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hcmut.examify.DTOs.ResponseObject;
+import hcmut.examify.DTOs.ResultDTO;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -106,5 +107,13 @@ public class ResultService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ResponseObject("ERROR", "Error getting FNC_getResultByStudentIdAndTestId(): " + e.getMessage(), null));
         }
+    }
+
+    public ResponseEntity<ResponseObject> PROC_createResult(ResultDTO resultDTO) {
+
+    }
+
+    public ResponseEntity<ResponseObject> PROC_updateResult(ResultDTO resultDTO) {
+
     }
 }
