@@ -45,12 +45,12 @@ public class StudentController {
         return studentService.PROC_createStudentAnswer(studentId, questionId);
     }
 
-    @PutMapping("/{studentId}/answers/{answerId}")
+    @GetMapping("/{studentId}/questions/{questionId}/answers/{answerId}")
     public ResponseEntity<ResponseObject> updateStudentAnswer(
         @PathVariable("studentId") Integer studentId,
-        @PathVariable("answerId") Integer answerId,
-        @RequestBody AnswerDTO answerDTO ) {
-        return studentService.PROC_updateStudentAnswer(answerDTO, studentId, answerId);
+        @PathVariable("questionId") Integer questionId,
+        @PathVariable("answerId") Integer answerId) {
+        return studentService.PROC_updateStudentAnswer(studentId, questionId, answerId);
     }
 
     // NOTE: do not require endtime IN BODY -> studentid, testid, starttime
