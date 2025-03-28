@@ -113,7 +113,7 @@ public class UserService {
     public ResponseEntity<ResponseObject> FNC_getUserInfo(Integer userId) {
         try {
             String userInfo = jdbcTemplate.queryForObject(
-                    "SELECT get_question_of_test_by_questionID(?, ?)",
+                    "SELECT get_user_infor(?)",
                     String.class, userId
             );
             if (userInfo == null) {
