@@ -96,6 +96,36 @@ public class TestsService {
         }
     }
 
+    public ResponseEntity<ResponseObject> FNC_getTestInforByPasscode(String passcode) {
+        try {
+            String test = jdbcTemplate.queryForObject(
+                    "SELECT get_test_by_passcode(?)",
+                    String.class, passcode
+            );
+            if (test == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                        .body(new ResponseObject("OK", "Query to get FNC_getTestInforByPasscode() successfully with data = null", test));
+            }
+
+            JsonNode jsonNode = objectMapper.readTree(test);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getTestInforByPasscode() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ResponseObject("ERROR", "Error getting FNC_getTestInforByPasscode(): " + e.getMessage(), null));
+        }
+    }
+
 
     public ResponseEntity<ResponseObject> PROC_createTest(TestsDTO testsDTO) {
         try {
