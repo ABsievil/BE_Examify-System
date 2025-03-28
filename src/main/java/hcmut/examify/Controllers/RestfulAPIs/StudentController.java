@@ -45,7 +45,7 @@ public class StudentController {
         return studentService.PROC_createStudentAnswer(studentId, questionId);
     }
 
-    @GetMapping("/{studentId}/questions/{questionId}/answers/{answerId}")
+    @PutMapping("/{studentId}/questions/{questionId}/answers/{answerId}")
     public ResponseEntity<ResponseObject> updateStudentAnswer(
         @PathVariable("studentId") Integer studentId,
         @PathVariable("questionId") Integer questionId,
