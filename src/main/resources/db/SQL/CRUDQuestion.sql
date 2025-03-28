@@ -5,19 +5,6 @@ RETURNS JSON AS $$
 DECLARE
     result JSON;
 BEGIN
-    SELECT json_agg(row_to_json(t)) 
-    INTO result
-    FROM (SELECT * FROM Question WHERE TestID = test_id) AS t;
-
-    RETURN result;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE OR REPLACE FUNCTION get_all_question_of_test(test_id INT)
-RETURNS JSON AS $$
-DECLARE
-    result JSON;
-BEGIN
     SELECT COALESCE(jsonb_agg(jsonb_build_object(
         'id', q.id,
         'content', q.content,
