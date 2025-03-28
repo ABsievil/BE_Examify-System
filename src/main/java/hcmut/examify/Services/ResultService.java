@@ -116,7 +116,7 @@ public class ResultService {
 
     public ResponseEntity<ResponseObject> PROC_createResult(ResultDTO resultDTO) {
         try {
-            if (resultDTO.getStartTime() != null) {
+            if (resultDTO.getEndTime() != null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ResponseObject("ERROR", "Do not require endtime", null));
             }
