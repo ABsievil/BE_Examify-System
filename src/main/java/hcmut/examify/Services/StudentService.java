@@ -109,14 +109,15 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseObject> PROC_updateStudentAnswer(Integer studentId, Integer questionId, Boolean isCorrect){
+    public ResponseEntity<ResponseObject> PROC_updateStudentAnswer(Integer studentId, Integer questionId, Boolean isCorrect, Integer answerId){
         try {
             jdbcTemplate.execute(
-            "CALL update_studentAnswer(?, ?, ?)",
+            "CALL update_studentAnswer(?, ?, ?, ?)",
             (PreparedStatementCallback<Void>) ps -> {
                 ps.setInt(1, studentId);
                 ps.setInt(2, questionId);
                 ps.setBoolean(3, isCorrect);
+                ps.setInt(4, answerId);
  
                 ps.execute();
                 return null;

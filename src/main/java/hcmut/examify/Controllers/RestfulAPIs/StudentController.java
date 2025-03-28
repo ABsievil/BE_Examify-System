@@ -34,19 +34,20 @@ public class StudentController {
         return studentService.FNC_getStudentAnswer(studentId, questionId);
     }
 
-    @PostMapping
+    @PostMapping("/{studentId}/answers")
     public ResponseEntity<ResponseObject> createStudentAnswer(
         @PathVariable("studentId") Integer studentId,
         @RequestParam("questionId") Integer questionId ){
         return studentService.PROC_createStudentAnswer(studentId, questionId);
     }
 
-    @PutMapping
+    @PutMapping("/{studentId}/answers/{answerId}")
     public ResponseEntity<ResponseObject> updateStudentAnswer(
         @PathVariable("studentId") Integer studentId,
         @RequestParam("questionId") Integer questionId,
-        @RequestParam("isCorrect") Boolean isCorrect ){
-        return studentService.PROC_updateStudentAnswer(studentId, questionId, isCorrect);
+        @RequestParam("isCorrect") Boolean isCorrect, 
+        @PathVariable("answerId") Integer answerId) {
+        return studentService.PROC_updateStudentAnswer(studentId, questionId, isCorrect, answerId);
     }
 
 }
