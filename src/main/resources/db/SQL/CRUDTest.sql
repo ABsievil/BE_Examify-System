@@ -54,6 +54,32 @@ $$ LANGUAGE plpgsql;
 
 -- SELECT get_test_of_teacher_by_testID(1, 1);
 
+-- Lấy thông tin bài test bằng passcode
+
+CREATE OR REPLACE FUNCTION get_test_by_passcode(passcode_input TEXT)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT json_build_object(
+        'id', t.id,
+        'title', t.title,
+        'description', t.description,
+        'numberquestion', t.numberquestion,
+        'passcode', t.passcode,
+        'testtime', t.testtime,
+        'timeopen', t.timeopen,
+        'timeclose', t.timeclose,
+        'teacherid', t.teacherid
+    )
+    INTO result
+    FROM Test t
+    WHERE t.passcode = passcode_input;
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
 -- Tạo bài test
 
 CREATE OR REPLACE PROCEDURE create_test(
