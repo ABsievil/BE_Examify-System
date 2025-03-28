@@ -24,15 +24,16 @@ $$;
 
 -- call create_studentAnswer(1, 2);
 
-CREATE OR REPLACE PROCEDURE update_studentAnswer(student_id INT, question_id INT, isCorrect_input BOOLEAN) 
+CREATE OR REPLACE PROCEDURE update_studentAnswer(student_id INT, question_id INT, isCorrect_input BOOLEAN, answer_id TEXT) 
 LANGUAGE plpgsql
 AS $$
 BEGIN
     UPDATE StudentAnswer
     SET
-        isCorrect = isCorrect_input
+        isCorrect = isCorrect_input,
+        answerID = answer_id
     WHERE StudentID = student_id AND QuestionID = question_id;
 END;
 $$;
 
--- call update_studentAnswer(1, 2, true);
+-- call update_studentAnswer(1, 2, true, 1);
