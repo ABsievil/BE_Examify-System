@@ -2,13 +2,7 @@ package hcmut.examify.Controllers.RestfulAPIs;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import hcmut.examify.DTOs.ChangePasswordDTO;
 import hcmut.examify.DTOs.NewAccountDTO;
@@ -36,5 +30,10 @@ public class UserController {
     @PutMapping("change-password")
     public ResponseEntity<ResponseObject> changePassword(@RequestBody ChangePasswordDTO changePassword) {
         return userService.PROC_changePassword(changePassword);
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<ResponseObject> getUserInfo(@PathVariable Integer userId) {
+        return userService.FNC_getUserInfo(userId);
     }
 }
