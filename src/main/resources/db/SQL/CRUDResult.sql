@@ -1,3 +1,4 @@
+-- PASS
 CREATE OR REPLACE FUNCTION get_all_student_result(test_id INT)
 RETURNS JSON AS $$
 DECLARE
