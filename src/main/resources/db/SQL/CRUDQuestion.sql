@@ -1,5 +1,5 @@
 -- Lấy thông tin tất cả question của bài test
-
+--PASS
 CREATE OR REPLACE FUNCTION get_all_question_of_test(test_id INT)
 RETURNS JSON AS $$
 DECLARE
@@ -16,7 +16,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_all_question_of_test(1);
 
 -- Lấy nội dung của 1 question bằng questionID
-
+--PASS
 CREATE OR REPLACE FUNCTION get_question_of_test_by_questionID(test_id INT, question_id INT)
 RETURNS JSON AS $$
 DECLARE
@@ -33,7 +33,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_question_of_test_by_questionID(1, 1);
 
 -- Tạo bài Question
-
+--PASS
 CREATE OR REPLACE PROCEDURE create_question(
     content_input TEXT, 
     score_input FLOAT, 
@@ -48,7 +48,7 @@ BEGIN
     RETURNING ID INTO new_question_id;
 END;
 $$;
-
+--PASS
 CREATE OR REPLACE FUNCTION add_question(
     content_input TEXT, 
     score_input FLOAT, 

@@ -1,5 +1,5 @@
 -- Lấy thông tin tất cả bài test
-
+--PASS
 CREATE OR REPLACE FUNCTION get_all_test_of_teacher(teacher_id INT)
 RETURNS JSON AS $$
 DECLARE
@@ -16,7 +16,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_all_test_of_teacher(1);
 
 -- Lấy thông tin một bài test dựa trên testID
-
+--PASS
 CREATE OR REPLACE FUNCTION get_test_of_teacher_by_testID(teacher_id INT, test_id INT)
 RETURNS JSON AS $$
 DECLARE
@@ -81,7 +81,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Tạo bài test
-
+--PASS
+-- Bản test procedure sử dụng tính năng inout parameter để trả về ID của bài test vừa tạo và generate passcode ngẫu nhiên
 CREATE OR REPLACE PROCEDURE create_test(
     title_input TEXT,
     description_input TEXT,
@@ -89,19 +90,44 @@ CREATE OR REPLACE PROCEDURE create_test(
     timeopen_input TIMESTAMP,
     timeclose_input TIMESTAMP,
     teacherID_input INT,
-    numberquestion_input INT
+    numberquestion_input INT,
+    INOUT new_id INT DEFAULT NULL
 )
 LANGUAGE plpgsql
 AS $$
+DECLARE
+    passcode_text TEXT;
+    attempt INT := 0;
+    max_attempts INT := 100;
 BEGIN
-    INSERT INTO Test (Title, Description, TestTime, TimeOpen, TimeClose, TeacherID, NumberQuestion)
-    VALUES (title_input, description_input, testtime_input, timeopen_input, timeclose_input, teacherID_input, numberquestion_input);
+    -- Sinh passcode ngẫu nhiên và kiểm tra tính duy nhất
+    LOOP
+        -- Tạo chuỗi 6 chữ số ngẫu nhiên (000000 - 999999)
+        passcode_text := LPAD(FLOOR(RANDOM() * 1000000)::TEXT, 6, '0');
+        
+        -- Kiểm tra xem passcode đã tồn tại trong bảng Test chưa
+        IF NOT EXISTS (SELECT 1 FROM Test WHERE Passcode = passcode_text) THEN
+            EXIT; -- Thoát vòng lặp nếu passcode chưa tồn tại
+        END IF;
+        
+        -- Tăng số lần thử và kiểm tra giới hạn
+        attempt := attempt + 1;
+        IF attempt >= max_attempts THEN
+            RAISE EXCEPTION 'Không thể sinh passcode duy nhất sau % lần thử', max_attempts;
+        END IF;
+    END LOOP;
+    
+    -- Chèn dữ liệu vào bảng Test với passcode đã sinh
+    INSERT INTO Test (Title, Description, Passcode, TestTime, TimeOpen, TimeClose, TeacherID, NumberQuestion)
+    VALUES (title_input, description_input, passcode_text, testtime_input, timeopen_input, timeclose_input, teacherID_input, numberquestion_input)
+    RETURNING ID INTO new_id;
 END;
 $$;
 
 -- CALL create_test('Bài kiểm tra Toán', 'Đề kiểm tra học kỳ môn Toán', 60, '2025-04-01 08:00:00', '2025-04-01 10:00:00', 1, 10);
 
 -- convert to func for this procedure:
+--PASS
 CREATE OR REPLACE FUNCTION add_test(
     title_input TEXT,
     description_input TEXT,
@@ -144,48 +170,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 -- SELECT add_test('Bài kiểm tra Toán', 'Đề kiểm tra học kỳ môn Toán', '111111', 60, '2025-04-01 08:00:00', '2025-04-01 10:00:00', 1, 10);
-
--- Bản test procedure sử dụng tính năng inout parameter để trả về ID của bài test vừa tạo và generate passcode ngẫu nhiên
-CREATE OR REPLACE PROCEDURE create_test(
-    title_input TEXT,
-    description_input TEXT,
-    testtime_input INT,
-    timeopen_input TIMESTAMP,
-    timeclose_input TIMESTAMP,
-    teacherID_input INT,
-    numberquestion_input INT,
-    INOUT new_id INT DEFAULT NULL
-)
-LANGUAGE plpgsql
-AS $$
-DECLARE
-    passcode_text TEXT;
-    attempt INT := 0;
-    max_attempts INT := 100;
-BEGIN
-    -- Sinh passcode ngẫu nhiên và kiểm tra tính duy nhất
-    LOOP
-        -- Tạo chuỗi 6 chữ số ngẫu nhiên (000000 - 999999)
-        passcode_text := LPAD(FLOOR(RANDOM() * 1000000)::TEXT, 6, '0');
-        
-        -- Kiểm tra xem passcode đã tồn tại trong bảng Test chưa
-        IF NOT EXISTS (SELECT 1 FROM Test WHERE Passcode = passcode_text) THEN
-            EXIT; -- Thoát vòng lặp nếu passcode chưa tồn tại
-        END IF;
-        
-        -- Tăng số lần thử và kiểm tra giới hạn
-        attempt := attempt + 1;
-        IF attempt >= max_attempts THEN
-            RAISE EXCEPTION 'Không thể sinh passcode duy nhất sau % lần thử', max_attempts;
-        END IF;
-    END LOOP;
-    
-    -- Chèn dữ liệu vào bảng Test với passcode đã sinh
-    INSERT INTO Test (Title, Description, Passcode, TestTime, TimeOpen, TimeClose, TeacherID, NumberQuestion)
-    VALUES (title_input, description_input, passcode_text, testtime_input, timeopen_input, timeclose_input, teacherID_input, numberquestion_input)
-    RETURNING ID INTO new_id;
-END;
-$$;
 
 -- Chỉnh sửa thông tin của bài test
 
