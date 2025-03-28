@@ -28,7 +28,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- select get_result_by_student_id(1, 1)
-
 CREATE OR REPLACE PROCEDURE create_result(student_id INT, test_id INT, start_time TIMESTAMP) 
 LANGUAGE plpgsql AS $$
 DECLARE

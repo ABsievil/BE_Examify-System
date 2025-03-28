@@ -41,7 +41,7 @@ public class TestsController {
     }
 
     @GetMapping("/{testId}/results")
-    public ResponseEntity<ResponseObject> getTestResults(@PathVariable Integer testId) {
+    public ResponseEntity<ResponseObject> getAllResults(@PathVariable Integer testId) {
         return resultService.FNC_getAllTestResults(testId);
     }
 
