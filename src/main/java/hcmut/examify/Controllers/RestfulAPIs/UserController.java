@@ -27,7 +27,7 @@ public class UserController {
         return userService.PROC_updateUserInfor(updateAccount);
     }
 
-    @PutMapping("change-password")
+    @PutMapping("/change-password")
     public ResponseEntity<ResponseObject> changePassword(@RequestBody ChangePasswordDTO changePassword) {
         return userService.PROC_changePassword(changePassword);
     }
