@@ -1,7 +1,7 @@
 package hcmut.examify.Controllers.RestfulAPIs;
 
-import hcmut.examify.DTOs.AnswerDTO;
-import hcmut.examify.DTOs.ResultDTO;
+import hcmut.examify.DTOs.CreateResultDTO;
+import hcmut.examify.DTOs.UpdateResultDTO;
 import hcmut.examify.Services.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,13 +55,13 @@ public class StudentController {
 
     // NOTE: do not require endtime IN BODY -> studentid, testid, starttime
     @PostMapping("/{studentId}/results")
-    public ResponseEntity<ResponseObject> createStudentResult(@RequestBody ResultDTO resultDTO) {
+    public ResponseEntity<ResponseObject> createStudentResult(@RequestBody CreateResultDTO resultDTO) {
         return resultService.PROC_createResult(resultDTO);
     }
 
     // NOTE: do not require starttime IN BODY -> studentid, testid, endtime
     @PutMapping("{studentId}/results")
-    public ResponseEntity<ResponseObject> updateStudentResult(@RequestBody ResultDTO resultDTO) {
+    public ResponseEntity<ResponseObject> updateStudentResult(@RequestBody UpdateResultDTO resultDTO) {
         return resultService.PROC_updateResult(resultDTO);
     }
 

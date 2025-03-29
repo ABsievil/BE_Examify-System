@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResultDTO {
+public class UpdateResultDTO {
     private Integer studentId;
     private Integer testId;
-    private String startTime;   // create result
     private String endTime; // update result
 }

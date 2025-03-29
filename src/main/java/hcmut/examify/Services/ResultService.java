@@ -3,8 +3,10 @@ package hcmut.examify.Services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hcmut.examify.DTOs.CreateResultDTO;
 import hcmut.examify.DTOs.ResponseObject;
-import hcmut.examify.DTOs.ResultDTO;
+import hcmut.examify.DTOs.UpdateResultDTO;
+import org.hibernate.sql.Update;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -114,13 +116,8 @@ public class ResultService {
         }
     }
 
-    public ResponseEntity<ResponseObject> PROC_createResult(ResultDTO resultDTO) {
+    public ResponseEntity<ResponseObject> PROC_createResult(CreateResultDTO resultDTO) {
         try {
-            if (resultDTO.getEndTime() != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ResponseObject("ERROR", "Do not require endtime", null));
-            }
-
             // Định dạng timestamp
             DateTimeFormatter isoFormatter = DateTimeFormatter.ISO_DATE_TIME;
             DateTimeFormatter sqlFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -157,16 +154,11 @@ public class ResultService {
         }
     }
 
-    public ResponseEntity<ResponseObject> PROC_updateResult(ResultDTO resultDTO) {
+    public ResponseEntity<ResponseObject> PROC_updateResult(UpdateResultDTO resultDTO) {
         try {
             if (resultDTO.getStudentId() == null || resultDTO.getTestId() == null) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ResponseObject("ERROR", "Student ID and Test ID are required", null));
-            }
-
-            if (resultDTO.getStartTime() != null) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ResponseObject("ERROR", "Do not require starttime", null));
             }
 
             System.out.println("result:" + resultDTO);
