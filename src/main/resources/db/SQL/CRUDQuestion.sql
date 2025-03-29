@@ -1,13 +1,30 @@
 -- Lấy thông tin tất cả question của bài test
-
+--PASS
 CREATE OR REPLACE FUNCTION get_all_question_of_test(test_id INT)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
 BEGIN
-    SELECT json_agg(row_to_json(t)) 
+    SELECT COALESCE(json_agg(json_build_object(
+        'id', q.id,
+        'content', q.content,
+        'score', q.score,
+        'testid', q.testid,
+        'answers', COALESCE(
+            (SELECT json_agg(json_build_object(
+                'id', a.id,
+                'content', a.content,
+                'iscorrect', a.iscorrect,
+                'questionid', a.questionid
+            ))
+            FROM Answer a
+            WHERE a.questionid = q.id),
+            '[]'::json
+        )
+    )), '[]'::json)
     INTO result
-    FROM (SELECT * FROM Question WHERE TestID = test_id) AS t;
+    FROM Question q
+    WHERE q.testid = test_id;
 
     RETURN result;
 END;
@@ -16,7 +33,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_all_question_of_test(1);
 
 -- Lấy nội dung của 1 question bằng questionID
-
+--PASS
 CREATE OR REPLACE FUNCTION get_question_of_test_by_questionID(test_id INT, question_id INT)
 RETURNS JSON AS $$
 DECLARE
@@ -33,7 +50,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_question_of_test_by_questionID(1, 1);
 
 -- Tạo bài Question
-
+--PASS
 CREATE OR REPLACE PROCEDURE create_question(
     content_input TEXT, 
     score_input FLOAT, 
@@ -48,7 +65,7 @@ BEGIN
     RETURNING ID INTO new_question_id;
 END;
 $$;
-
+--PASS
 CREATE OR REPLACE FUNCTION add_question(
     content_input TEXT, 
     score_input FLOAT, 
@@ -68,6 +85,7 @@ $$ LANGUAGE plpgsql;
 -- CALL create_question('1+1=?', 2.0, 1);
 
 -- Chỉnh sửa thông tin của bài Question
+-- PASS
 CREATE OR REPLACE PROCEDURE edit_question(question_id INT, content_input TEXT, score_input FLOAT, testID_input INT)
 LANGUAGE plpgsql
 AS $$

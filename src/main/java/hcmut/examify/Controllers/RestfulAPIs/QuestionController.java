@@ -30,4 +30,8 @@ public class QuestionController {
         return questionService.FNC_getQuestionById(testId, questionId);
     }
 
+    @DeleteMapping("/{questionId}")
+    public ResponseEntity<ResponseObject> PROC_deleteQuestionById(@PathVariable Integer questionId) {
+        return questionService.PROC_deleteQuestionById(questionId);
+    }
 }

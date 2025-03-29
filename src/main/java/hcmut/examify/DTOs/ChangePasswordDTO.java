@@ -1,5 +1,4 @@
 package hcmut.examify.DTOs;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,8 +6,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnswerDTO {
-    private Integer id;
-    private String content;
-    private Boolean isCorrect;
+public class ChangePasswordDTO {
+    private String username;
+    private String oldPassword;
+    private String newPassword;
 }
