@@ -22,9 +22,9 @@ public class UserController {
         return userService.PROC_addUser(newAccount);
     }
 
-    @PutMapping
-    public ResponseEntity<ResponseObject> updateUserInfor(@RequestBody UpdateAccountDTO updateAccount) {
-        return userService.PROC_updateUserInfor(updateAccount);
+    @PutMapping("/{userId}")
+    public ResponseEntity<ResponseObject> updateUserInfor(@RequestBody UpdateAccountDTO updateAccount, @PathVariable Integer userId) {
+        return userService.PROC_updateUserInfor(updateAccount, userId);
     }
 
     @PutMapping("/change-password")

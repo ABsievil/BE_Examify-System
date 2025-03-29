@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAccountDTO {
-    private Integer userId;
     private String name;
     private String email;
     private Date dob;
