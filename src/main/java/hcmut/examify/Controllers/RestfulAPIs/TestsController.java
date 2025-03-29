@@ -40,8 +40,8 @@ public class TestsController {
         return testsService.PROC_updateTest(testsDTO);
     }
 
-    @DeleteMapping
-    public ResponseEntity<ResponseObject> deleteTest(@RequestParam("testId") Integer testId){
+    @DeleteMapping("/{testId}")
+    public ResponseEntity<ResponseObject> deleteTest(@PathVariable Integer testId){
         return testsService.PROC_deleteTest(testId);
     }
 
