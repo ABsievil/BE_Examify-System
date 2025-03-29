@@ -77,6 +77,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             }
 
             User user = userRepository.findByUsername(uniqueId);
+            if (user == null) {
+                user = userRepository.findByDbUserEmail(uniqueId);
+            }
             Optional<User> optionalUser = Optional.ofNullable(user);
 
             optionalUser.ifPresentOrElse(u -> {
