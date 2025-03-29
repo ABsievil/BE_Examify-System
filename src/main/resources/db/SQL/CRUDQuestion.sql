@@ -106,19 +106,19 @@ $$;
 -- CALL edit_question(17, '2+2=?', null, null);
 
 -- Xóa bài Question
--- CREATE OR REPLACE PROCEDURE delete_question(question_id INT)
--- LANGUAGE plpgsql
--- AS $$
--- BEGIN
---     DELETE FROM Question
---     WHERE ID = question_id;
+CREATE OR REPLACE PROCEDURE delete_question(question_id INT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    DELETE FROM Question
+    WHERE ID = question_id;
     
---     IF NOT FOUND THEN
---         RAISE NOTICE 'No question found with ID %', question_id;
---     ELSE
---         RAISE NOTICE 'Question ID % deleted successfully', question_id;
---     END IF;
--- END;
--- $$;
+    IF NOT FOUND THEN
+        RAISE NOTICE 'No question found with ID %', question_id;
+    ELSE
+        RAISE NOTICE 'Question ID % deleted successfully', question_id;
+    END IF;
+END;
+$$;
 
 -- delete_question(17);
