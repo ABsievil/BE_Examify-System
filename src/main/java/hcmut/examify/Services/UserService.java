@@ -17,6 +17,7 @@ import hcmut.examify.DTOs.ChangePasswordDTO;
 import hcmut.examify.DTOs.NewAccountDTO;
 import hcmut.examify.DTOs.ResponseObject;
 import hcmut.examify.DTOs.UpdateAccountDTO;
+import hcmut.examify.Repositories.UserRepository;
 
 @Service
 public class UserService {
@@ -25,6 +26,9 @@ public class UserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserRepository userRepository;
 
     public UserService(JdbcTemplate jdbcTemplate, ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
@@ -86,12 +90,19 @@ public class UserService {
 
         public ResponseEntity<ResponseObject> PROC_changePassword(ChangePasswordDTO changePasswordDTO) {
             try {
+                String dbPassword = userRepository.findPasswordByUsername(changePasswordDTO.getUsername());
+                boolean isMatch = passwordEncoder.matches(changePasswordDTO.getOldPassword(), dbPassword);
+
+                if (!isMatch) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body(new ResponseObject("ERROR", "Old password is incorrect", null));
+                }
+
                 jdbcTemplate.execute(
-                "CALL change_password(?, ?, ?)",
+                "CALL update_password(?, ?)",
                 (PreparedStatementCallback<Void>) ps -> {
                     ps.setString(1, changePasswordDTO.getUsername());
-                    ps.setString(2, passwordEncoder.encode(changePasswordDTO.getOldPassword()));
-                    ps.setString(3, passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+                    ps.setString(2, passwordEncoder.encode(changePasswordDTO.getNewPassword()));
 
                     ps.execute();
                     return null;
