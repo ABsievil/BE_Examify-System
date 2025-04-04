@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-
+import org.springframework.beans.factory.annotation.Value;
 import hcmut.examify.Models.Role;
 import hcmut.examify.Models.User;
 import hcmut.examify.Models.DBUser;
@@ -46,6 +46,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Autowired
     DBUserRepository dbUserRepository;
 
+     @Value("${fe.url}")
+     private String frontendUrl;
+
     public OAuth2LoginSuccessHandler(JwtUtilities jwtUtilities) {
         this.jwtUtilities = jwtUtilities;
     }
@@ -64,6 +67,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             String name = principal.getAttribute("name");
             String email = principal.getAttribute("email");
             String uniqueId;
+            // Khai báo biến role nhưng không gán giá trị ngay
+            Role userRole;
 
             String registrationId = token.getAuthorizedClientRegistrationId();
             if ("github".equals(registrationId)) {
@@ -80,12 +85,14 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             if (user == null) {
                 user = userRepository.findByDbUserEmail(uniqueId);
             }
-            Optional<User> optionalUser = Optional.ofNullable(user);
 
-            optionalUser.ifPresentOrElse(u -> {
-                String jwtToken = jwtUtilities.generateToken(u.getUsername(), u.getRole().toString(), u.getUserid().toString());
-                addJwtCookie(response, jwtToken);
-            }, () -> {
+            final String jwtToken;
+            if (user != null) {
+                // Xử lý người dùng đã tồn tại
+                jwtToken = jwtUtilities.generateToken(user.getUsername(), user.getRole().toString(), user.getUserid().toString());
+                userRole = user.getRole();
+            } else {
+                // Xử lý người dùng mới
                 String nameWithoutAccent = removeAccents(name);
                 String[] nameParts = splitFullName(nameWithoutAccent);
                 String nameUser = nameParts[0] + nameParts[1] + nameParts[2];
@@ -98,24 +105,36 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 // Tạo User trong bảng account và liên kết với DBUser
                 User userEntity = new User();
                 userEntity.setUsername(nameUser);
-                // userEntity.setEmail(nameUser);
                 userEntity.setPassword(passwordEncoder.encode(nameUser));
                 userEntity.setRole(Role.STUDENT);
-                // Thiết lập userid liên kết với id từ bảng users
                 userEntity.setUserid(dbUserId.intValue());
                 userRepository.save(userEntity);
 
-                String jwtToken = jwtUtilities.generateToken(nameUser, Role.STUDENT.toString(), dbUserId);
-                addJwtCookie(response, jwtToken);
-            });
+                jwtToken = jwtUtilities.generateToken(nameUser, Role.STUDENT.toString(), dbUserId);
+                userRole = Role.STUDENT;
+            }
 
-            getRedirectStrategy().sendRedirect(request, response, "/home");
+            // Add JWT cookie sau khi xác định jwtToken
+            addJwtCookie(response, jwtToken);
+
+            // Redirect dựa trên role
+            String redirectUrl = (userRole == Role.STUDENT) 
+                ? frontendUrl + "/student" 
+                : frontendUrl + "/teacher";
+            getRedirectStrategy().sendRedirect(request, response, redirectUrl);
         } else {
             super.onAuthenticationSuccess(request, response, authentication);
         }
     }
 
     private void addJwtCookie(HttpServletResponse response, String token) {
+        // Tạo cookie có thể truy cập từ JavaScript để FE có thể lấy token người dùng
+        Cookie cookieTransfer = new Cookie("jwt_transfer", token);
+        cookieTransfer.setHttpOnly(false); // cho phép JavaScript đọc
+        cookieTransfer.setPath("/");
+        cookieTransfer.setMaxAge(60); // chỉ tồn tại trong thời gian ngắn (60 giây)
+        response.addCookie(cookieTransfer);
+
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
