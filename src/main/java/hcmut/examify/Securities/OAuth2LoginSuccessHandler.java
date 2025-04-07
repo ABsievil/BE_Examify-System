@@ -97,20 +97,20 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 String[] nameParts = splitFullName(nameWithoutAccent);
                 String nameUser = nameParts[0] + nameParts[1] + nameParts[2];
                 // Đầu tiên, tạo DBUser mới trong bảng users
-                DBUser dbUser = dbUserRepository.createAndSaveUser(name, (email != null ? email : (nameUser + "@github.com")), LocalDate.now());
+                DBUser dbUser = dbUserRepository.createAndSaveUser(name, (email != null ? email : (nameUser + "@github.com")), null);
                 
                 // Sau khi lưu, lấy ID được tạo tự động
                 Long dbUserId = dbUser.getId();
                 
                 // Tạo User trong bảng account và liên kết với DBUser
                 User userEntity = new User();
-                userEntity.setUsername(nameUser);
+                userEntity.setUsername(uniqueId);  // Dùng email làm username cho oauth2 user
                 userEntity.setPassword(passwordEncoder.encode(nameUser));
                 userEntity.setRole(Role.STUDENT);
                 userEntity.setUserid(dbUserId.intValue());
                 userRepository.save(userEntity);
 
-                jwtToken = jwtUtilities.generateToken(nameUser, Role.STUDENT.toString(), dbUserId);
+                jwtToken = jwtUtilities.generateToken(uniqueId, Role.STUDENT.toString(), dbUserId);
                 userRole = Role.STUDENT;
             }
 
