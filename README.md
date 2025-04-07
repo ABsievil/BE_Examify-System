@@ -5,7 +5,8 @@ A full-stack web application designed to support teachers in conducting online a
 > **Capstone Project** | Team Size: 9 (1 Product Owner, 1 Scrum Master, 7 Developers)  
 > **Timeline**: 3/2025
 
-![Examify Landing Page](https://github.com/user-attachments/assets/db825071-f173-4fc3-a624-7aa6504a9e68)
+![Examify Landing Page](https://github.com/user-attachments/assets/b9684a0d-8606-4709-9455-09b9f6a55c9c)
+
 ---
 
 ## 📌 Description
