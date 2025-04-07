@@ -73,3 +73,25 @@ BEGIN
 END;
 $$;
 
+CREATE OR REPLACE PROCEDURE update_password(username_input TEXT, newpassword TEXT)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    -- Kiểm tra username tồn tại
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM Account 
+        WHERE username = username_input
+    ) THEN
+        RAISE EXCEPTION 'User not exist: %', username_input;
+    END IF;
+
+    -- Cập nhật mật khẩu mới
+    UPDATE Account
+    SET 
+        password = newpassword
+    WHERE username = username_input;
+
+    RAISE NOTICE 'Password updated successfully for user %', username_input;
+END;
+$$;

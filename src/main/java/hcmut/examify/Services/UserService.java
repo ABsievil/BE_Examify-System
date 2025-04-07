@@ -17,6 +17,8 @@ import hcmut.examify.DTOs.ChangePasswordDTO;
 import hcmut.examify.DTOs.NewAccountDTO;
 import hcmut.examify.DTOs.ResponseObject;
 import hcmut.examify.DTOs.UpdateAccountDTO;
+import hcmut.examify.DTOs.UpdatePasswordDTO;
+import hcmut.examify.Repositories.UserRepository;
 
 @Service
 public class UserService {
@@ -25,6 +27,9 @@ public class UserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    UserRepository userRepository;
 
     public UserService(JdbcTemplate jdbcTemplate, ObjectMapper objectMapper) {
         this.jdbcTemplate = jdbcTemplate;
@@ -71,34 +76,42 @@ public class UserService {
                     return null;
                 }
             );
-                return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("OK", "Query to update PROC_updateUserInfor() successfully", null));
-            } catch (DataAccessException e) {
-                // Xử lý lỗi liên quan đến truy cập dữ liệu
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
-            } catch (Exception e) {
-                // Xử lý các lỗi khác
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("ERROR", "Error updating PROC_updateUserInfor(): " + e.getMessage(), null));
-            }
+            
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_updateUserInfor() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_updateUserInfor(): " + e.getMessage(), null));
         }
+    }
 
-        public ResponseEntity<ResponseObject> PROC_changePassword(ChangePasswordDTO changePasswordDTO) {
-            try {
-                jdbcTemplate.execute(
-                "CALL change_password(?, ?, ?)",
-                (PreparedStatementCallback<Void>) ps -> {
-                    ps.setString(1, changePasswordDTO.getUsername());
-                    ps.setString(2, passwordEncoder.encode(changePasswordDTO.getOldPassword()));
-                    ps.setString(3, passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+    public ResponseEntity<ResponseObject> PROC_changePassword(ChangePasswordDTO changePasswordDTO) {
+        try {
+            String dbPassword = userRepository.findPasswordByUsername(changePasswordDTO.getUsername());
+            boolean isMatch = passwordEncoder.matches(changePasswordDTO.getOldPassword(), dbPassword);
 
-                    ps.execute();
-                    return null;
-                }
-            );
-                return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("OK", "Query to update PROC_changePassword() successfully", null));
+            if (!isMatch) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ResponseObject("ERROR", "Old password is incorrect", null));
+            }
+
+            jdbcTemplate.execute(
+            "CALL update_password(?, ?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, changePasswordDTO.getUsername());
+                ps.setString(2, passwordEncoder.encode(changePasswordDTO.getNewPassword()));
+
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_changePassword() successfully", null));
         } catch (DataAccessException e) {
             // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -107,6 +120,32 @@ public class UserService {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseObject("ERROR", "Error updating PROC_changePassword(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> PROC_updatePassword(UpdatePasswordDTO updatePasswordDTO) {
+        try {
+
+            jdbcTemplate.execute(
+            "CALL update_password(?, ?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, updatePasswordDTO.getUsername());
+                ps.setString(2, passwordEncoder.encode(updatePasswordDTO.getNewPassword()));
+
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_updatePassword() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_updatePassword(): " + e.getMessage(), null));
         }
     }
 

@@ -8,6 +8,7 @@ import hcmut.examify.DTOs.ChangePasswordDTO;
 import hcmut.examify.DTOs.NewAccountDTO;
 import hcmut.examify.DTOs.ResponseObject;
 import hcmut.examify.DTOs.UpdateAccountDTO;
+import hcmut.examify.DTOs.UpdatePasswordDTO;
 import hcmut.examify.Services.UserService;
 
 
@@ -30,6 +31,12 @@ public class UserController {
     @PutMapping("/change-password")
     public ResponseEntity<ResponseObject> changePassword(@RequestBody ChangePasswordDTO changePassword) {
         return userService.PROC_changePassword(changePassword);
+    }
+
+    // Endpoint for forgot password feature
+    @PutMapping("/update-password")
+    public ResponseEntity<ResponseObject> updatePassword(@RequestBody UpdatePasswordDTO updatePassword) {
+        return userService.PROC_updatePassword(updatePassword);
     }
 
     @GetMapping("/{userId}")

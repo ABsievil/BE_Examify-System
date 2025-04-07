@@ -19,6 +19,7 @@ public class WhiteList {
         "/login",
         "/403",
         "/api/authenticate",
+        "/oauth2/authorization/**",
         "/api/v1/Email/**",
         "/api/v1/Student/createNewPassword",
         "/api/v1/Student/addStudent",

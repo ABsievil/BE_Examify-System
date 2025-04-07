@@ -9,6 +9,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,4 +37,8 @@ public class User {
     @Column(name= "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToOne
+    @JoinColumn(name = "userid", referencedColumnName = "id", insertable = false, updatable = false)
+    private DBUser dbUser; // Entity ánh xạ bảng Users
 }
