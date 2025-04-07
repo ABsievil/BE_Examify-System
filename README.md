@@ -1,6 +1,7 @@
 # Examify - Online Examination System
 
 A full-stack web application designed to support teachers in conducting online assessments and exams, while enabling students to take exams and complete assessments, inspired by platforms like Azota, Quizizz, and Kahoot.
+![Examify Landing Page](https://github.com/user-attachments/assets/db825071-f173-4fc3-a624-7aa6504a9e68)
 
 > **Capstone Project** | Team Size: 9 (1 Product Owner, 1 Scrum Master, 7 Developers)  
 > **Timeline**: 3/2025
@@ -92,10 +93,13 @@ Watch the demo videos here:
 
 | Role    | Username | Password   |
 |---------|----------|------------|
-| Teacher | teacher1 | pass123    |
-| Student | student1 | pass123    |
+| Teacher | admin    | 1245       |
+| Student | ndduc    | 1245       |
 
-*Note: Demo accounts are not explicitly provided in the document. The above are placeholders based on typical demo account formats. Please replace with actual credentials if available.*
+Some passcodes to take exams:  
+- [Passcode 1](12345678)  
+- [Passcode 2](888888)
+- [Passcode 3](999999)
 
 ---
 
