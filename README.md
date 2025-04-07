@@ -1,6 +1,6 @@
 # Examify - Online Examination System
 
-A full-stack web application designed to support teachers in conducting online assessments and exams, while enabling students to take exams and complete assessments, inspired by platforms like Azota, Quizizz, and Kahoot.
+A full-stack web application designed to assist teachers in conducting online assessments and exams, while enabling students to take exams and complete assessments, inspired by platforms like Azota, Quizizz, and Kahoot.
 
 > **Capstone Project** | Team Size: 9 (1 Product Owner, 1 Scrum Master, 7 Developers)  
 > **Timeline**: 3/2025
@@ -10,7 +10,7 @@ A full-stack web application designed to support teachers in conducting online a
 
 ## 📌 Description
 
-Examify is an online examination system developed as part of a Scrum course by **Axon Active** and **HCMUT**, focusing on Agile Scrum methodologies within the Advanced Software Engineering curriculum. The project was completed over 2 days, consisting of 3 sprints (each approximately 4 hours). The platform enables teachers to create and manage tests, while students can access them using a passcode, take exams, complete assessments, and submit answers online. Results are tracked per student and per test, allowing teachers to analyze class performance.
+Examify is an online examination system developed as part of a Scrum course by **Axon Active** and **HCMUT**, focusing on Agile Scrum methodologies within the Advanced Software Engineering curriculum. The project was completed in 2 days across 3 sprints (each approximately 4 hours). The platform enables teachers to create and manage tests, while students can access them using a passcode, take exams, complete assessments, and submit answers online. Results are tracked per student and per test, allowing teachers to analyze class performance.
 
 ---
 
@@ -52,11 +52,12 @@ Examify is an online examination system developed as part of a Scrum course by *
 
 ## 🧹 Core Functionalities
 
-- **User Roles**: Teacher, Student — each with distinct permissions and UI.
+- **User Roles**:
+  - Teacher, Student — each with distinct permissions and UI.
 
 - **Authentication & Authorization**:
   - Secure login and logout for Teachers and Students.
-  - Passwords are hashed using the SHA-256 encryption algorithm.
+  - Passwords hashed using the SHA-256 hashing algorithm.
   - Role-based access control (Teacher, Student).
   - OAuth2 integration for secure third-party authentication.
   - Send mail OTP for secure user verification during registration or password reset.
