@@ -118,9 +118,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             addJwtCookie(response, jwtToken);
 
             // Redirect dựa trên role
-            String redirectUrl = (userRole == Role.STUDENT) 
-                ? frontendUrl + "/student" 
-                : frontendUrl + "/teacher";
+            String redirectUrl = frontendUrl + "/login#token=" + jwtToken;
             getRedirectStrategy().sendRedirect(request, response, redirectUrl);
         } else {
             super.onAuthenticationSuccess(request, response, authentication);
@@ -128,13 +126,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     }
 
     private void addJwtCookie(HttpServletResponse response, String token) {
-        // Tạo cookie có thể truy cập từ JavaScript để FE có thể lấy token người dùng
-        Cookie cookieTransfer = new Cookie("jwt_transfer", token);
-        cookieTransfer.setHttpOnly(false); // cho phép JavaScript đọc
-        cookieTransfer.setPath("/");
-        cookieTransfer.setMaxAge(60); // chỉ tồn tại trong thời gian ngắn (60 giây)
-        response.addCookie(cookieTransfer);
-
         Cookie cookie = new Cookie("jwt", token);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
