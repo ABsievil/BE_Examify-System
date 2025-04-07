@@ -131,6 +131,15 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         cookie.setPath("/");
         cookie.setMaxAge(3600);
         response.addCookie(cookie);
+
+        // Thêm SameSite=None thông qua header
+        response.setHeader("Set-Cookie", 
+        "jwt=" + token + 
+        "; Path=/; " + 
+        "HttpOnly; " + 
+        "Secure; " + 
+        "SameSite=None"
+    );
     }
 
     private String[] splitFullName(String fullName) {
