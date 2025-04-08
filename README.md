@@ -131,8 +131,8 @@ Access the deployed website here:
 
 ## 📂 GitHub Repositories
 
-- **Backend**: [github.com/ABsievil/BE-Examify-System](github.com/ABsievil/BE-Examify-System)  
-- **Frontend**: [github.com/Gloxiniaaa/Examify-FE](github.com/Gloxiniaaa/Examify-FE)
+- **Backend**: [github.com/ABsievil/BE-Examify-System](https://github.com/ABsievil/BE_Examify-System)  
+- **Frontend**: [github.com/Gloxiniaaa/Examify-FE](https://github.com/Gloxiniaaa/Examify-FE)
 
 ---
 
