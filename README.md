@@ -15,6 +15,33 @@ Examify is an online examination system developed as part of a Scrum course by *
 
 ---
 
+## 📶 Website Access
+
+Access the deployed website here:  
+[https://examify-online.azurewebsites.net/](https://examify-online.azurewebsites.net/)
+
+---
+
+## 📂 GitHub Repositories
+
+- **Backend**: [github.com/ABsievil/BE-Examify-System](https://github.com/ABsievil/BE_Examify-System)  
+- **Frontend**: [github.com/Gloxiniaaa/Examify-FE](https://github.com/Gloxiniaaa/Examify-FE)
+
+---
+## 🧪 Access Accounts
+
+| Role    | Username | Password   |
+|---------|----------|------------|
+| Teacher | admin    | 1245       |
+| Student | ndduc    | 1245       |
+
+Some passcodes to take exams:  
+- Passcode 1: 12345678 
+- Passcode 2: 888888
+- Passcode 3: 999999
+
+---
+
 ## 🚀 Technologies Used
 
 ### Backend:
@@ -90,20 +117,6 @@ Watch the demo videos here:
 
 ---
 
-## 🧪 Demo Accounts
-
-| Role    | Username | Password   |
-|---------|----------|------------|
-| Teacher | admin    | 1245       |
-| Student | ndduc    | 1245       |
-
-Some passcodes to take exams:  
-- Passcode 1: 12345678 
-- Passcode 2: 888888
-- Passcode 3: 999999
-
----
-
 ## 🛠️ Setup Instructions
 
 ### Backend:
@@ -119,20 +132,6 @@ cd frontend
 npm install
 npm start
 ```
-
----
-
-## 📶 Website Access
-
-Access the deployed website here:  
-[https://examify-online.azurewebsites.net/](https://examify-online.azurewebsites.net/)
-
----
-
-## 📂 GitHub Repositories
-
-- **Backend**: [github.com/ABsievil/BE-Examify-System](https://github.com/ABsievil/BE_Examify-System)  
-- **Frontend**: [github.com/Gloxiniaaa/Examify-FE](https://github.com/Gloxiniaaa/Examify-FE)
 
 ---
 
