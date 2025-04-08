@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class UpdateAccountDTO {
     private String name;
     private String email;
-    private Date dob;
+    private Date date_of_birth;
 }

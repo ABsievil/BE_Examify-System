@@ -70,7 +70,7 @@ public class UserService {
                 ps.setInt(1, userId);
                 ps.setString(2, updateAccount.getName());
                 ps.setString(3, updateAccount.getEmail());
-                ps.setDate(4, updateAccount.getDob());
+                ps.setDate(4, updateAccount.getDate_of_birth());
  
                     ps.execute();
                     return null;
