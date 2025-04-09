@@ -58,7 +58,7 @@ Some passcodes to take exams:
 
 ### Tools:
 - Trello (project management): [Tech Hunter Trello Board](https://trello.com/b/iAkqhwDt/tech-hunter)
-- Notion (API documentation)
+- Notion (API documentation): [Examify APIs Document](https://www.notion.so/API-Doc-Examify-1be5fd4cfa478035acfde2bfed6518fd?pvs=4)
 
 ---
 
